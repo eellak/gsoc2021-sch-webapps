@@ -61,6 +61,8 @@ mind something more user friendly for K12-studentsand more aesthetic to look at.
 
 ### Community bonding period (May 17– June 6)
 
+- Add npm packaging for https://gitlab.com/ts.sch.gr/l10762
+
 Research about nodejs and collect ideas and knowledgeabout the project such as
 downloading, extracting and processing the .zip formof the educational applications.
 
