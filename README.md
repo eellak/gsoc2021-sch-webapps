@@ -57,6 +57,8 @@ Due to my lack of time in this period I was only able to make this simple demo, 
 
 - Add npm packaging for https://gitlab.com/ts.sch.gr/l10760
 
+- Add npm packaging for https://gitlab.com/ts.sch.gr/l10761
+
 Research about nodejs and collect ideas and knowledge about the project such as downloading, extracting and processing the .zip form of the educational applications.
 
 
