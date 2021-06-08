@@ -1,0 +1,56 @@
+html,
+body {
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    font-family: Georgia, serif;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    height: 100%;
+    width: 100%;
+}
+
+.app-container {
+    background-color: rgb(216, 216, 205);
+    height: 100%;
+    width: 100%;
+}
+
+.top-bar {
+    display: flex;
+    position: relative;
+    height: 6vh;
+    min-height: 30px;
+    background-color: rgb(109, 119, 130);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hamburger {
+    position: relative;
+    height: 25px;
+    width: 25px;
+    background: url("imgs/menu.png");
+    background-size: cover;
+    margin: 0 1em;
+}
+
+#site-title {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 0 1em;
+}
+
+.side-menu {}
