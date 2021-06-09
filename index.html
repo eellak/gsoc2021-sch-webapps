@@ -13,7 +13,7 @@
     <!--link rel="icon" type="image/png" href="../imgs/favicon.ico" /-->
     <link rel="stylesheet" type="text/css" href="styles.css" />
 
-    <script src="../index.js"></script>
+    <script src="frontendjs.js"></script>
 </head>
 
 <body>
@@ -21,22 +21,110 @@
     <div class="loader"></div>
 
     <!-- Main container for top bar and apps -->
+    <!--Side open-close menu with all categories-->
+    <div id="mySidebar" class="side-menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Show All</a>
+        <a href="#">Category 1</a>
+        <a href="#">Category 2</a>
+        <a href="#">Category 3</a>
+        <a href="#">Category 4</a>
+
+        <div id="admin-button"></div>
+    </div>
+
     <div class="container">
-        <!--Side open-close menu with all categories-->
-        <div class="side-menu">
-
+        <!--Hamburger menu and page title-->
+        <div class="top-bar">
+            <div class="hamburger" onclick="openNav()"></div>
+            <a href="index.html" id="site-title">School Webapps Aggregator</a>
         </div>
-
         <div class="app-container">
-            <!--Hamburger menu and page title-->
-            <div class="top-bar">
-                <div class="hamburger"></div>
-                <a href="index.html" id="site-title">School Webapps Aggregator</a>
+
+            <div class="app">
+                <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
+                    <div class="image-container">
+                        <div class="overlay">
+                            <div class="play-icon"></div>
+                            <div class="click-play">Click to play</div>
+                        </div>
+
+                        <div class="app-image"></div>
+
+                    </div>
+                    <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
+                </a>
             </div>
+
+            <div class="app">
+                <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
+                    <div class="image-container">
+                        <div class="overlay">
+                            <div class="play-icon"></div>
+                            <div class="click-play">Click to play</div>
+                        </div>
+
+                        <div class="app-image"></div>
+
+                    </div>
+                    <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
+                </a>
+            </div>
+
+            <div class="app">
+                <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
+                    <div class="image-container">
+                        <div class="overlay">
+                            <div class="play-icon"></div>
+                            <div class="click-play">Click to play</div>
+                        </div>
+
+                        <div class="app-image"></div>
+
+                    </div>
+                    <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
+                </a>
+            </div>
+
+            <div class="app">
+                <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
+                    <div class="image-container">
+                        <div class="overlay">
+                            <div class="play-icon"></div>
+                            <div class="click-play">Click to play</div>
+                        </div>
+
+                        <div class="app-image"></div>
+
+                    </div>
+                    <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
+                </a>
+            </div>
+
+            <div class="app">
+                <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
+                    <div class="image-container">
+                        <div class="overlay">
+                            <div class="play-icon"></div>
+                            <div class="click-play">Click to play</div>
+                        </div>
+
+                        <div class="app-image"></div>
+
+                    </div>
+                    <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
+                </a>
+            </div>
+
+
         </div>
+
+    </div>
 
     </div>
 
 </body>
 
 </html>
+
+<!--<div>Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>-->
