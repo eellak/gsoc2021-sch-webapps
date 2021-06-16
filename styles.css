@@ -115,9 +115,10 @@ body {
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 650px) {
     #site-title {
         font-size: 18px;
+        text-align: end;
     }
 }
 
