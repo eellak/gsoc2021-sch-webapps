@@ -122,12 +122,11 @@ body {
     }
 }
 
-.app-container {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+#app-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 18em);
+    justify-content: space-evenly;
+    grid-gap: 2em 1em;
     margin: 3em;
 }
 
@@ -136,7 +135,6 @@ body {
     background-color: rgb(255, 255, 255);
     height: 18em;
     width: 18em;
-    margin: 1.5em;
     border-radius: 0 0 0.5em 0.5em;
 }
 
