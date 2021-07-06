@@ -146,17 +146,17 @@ body {
     width: 100%;
 }
 
-.play-icon {
+.start-icon {
     position: relative;
     height: 3em;
     width: 3em;
-    background: url("imgs/play.png");
+    background: url("imgs/start.png");
     background-size: cover;
     cursor: pointer;
     margin-top: 1em;
 }
 
-.click-play {
+.click-start {
     position: relative;
     font-size: 1.5em;
     color: rgb(49, 49, 49);
