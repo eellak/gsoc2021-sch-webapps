@@ -17,7 +17,7 @@
     <script src="frontendjs.js"></script>
 </head>
 
-<body>
+<body onload="loadApps()">
     <!-- Loading icon -->
     <div class="loader"></div>
 
@@ -26,7 +26,7 @@
     <div id="mySidebar" class="side-menu">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="#">Όλα</a>
-        <a href="#">Κατηγορία 1</a>
+        <a href="#">Νηπιαγωγείο</a>
         <a href="#">Κατηγορία 2</a>
         <a href="#">Κατηγορία 3</a>
         <a href="#">Κατηγορία 4</a>
@@ -40,7 +40,7 @@
             <div class="hamburger" onclick="openNav()"></div>
             <a href="index.html" id="site-title">Εκκινητής εκπαιδευτικών ιστοεφαρμογών</a>
         </div>
-        <div id="app-container" onclick="loadApps()">
+        <div id="app-container">
             <div class="app" id="demo-app">
                 <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
                     <div class="image-container">
