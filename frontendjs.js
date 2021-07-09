@@ -11,47 +11,63 @@ function closeNav() {
 }
 
 // load dynamically into container every app needed
-function loadApps() { // args: appTitle, appURL, appImg
-    var app_container = document.getElementById('app-container')
-    console.log(app_container.childNodes)
+function buildApp(appDescription, appURL, appImg) {
+    var appContainer = document.getElementById('app-container')
+    console.log(appContainer.childNodes)
 
     var app = document.createElement('div')
     app.classList.add('app')
 
     var a = document.createElement('a')
-    a.href = ''
+    a.href = appURL
     a.target = '_blank'
 
-    var image_container = document.createElement('div')
-    image_container.classList.add('image-container')
+    var imageContainer = document.createElement('div')
+    imageContainer.classList.add('image-container')
 
     var overlay = document.createElement('div')
     overlay.classList.add('overlay')
 
-    var start_icon = document.createElement('div')
-    start_icon.classList.add('start-icon')
+    var startIcon = document.createElement('div')
+    startIcon.classList.add('start-icon')
 
-    var click_start = document.createElement('div')
-    click_start.classList.add('click-start')
-    click_start.textContent = 'Click to start'
+    var clickStart = document.createElement('div')
+    clickStart.classList.add('click-start')
+    clickStart.textContent = 'Click to start'
 
-    overlay.appendChild(start_icon)
-    overlay.appendChild(click_start)
+    overlay.appendChild(startIcon)
+    overlay.appendChild(clickStart)
 
-    var app_image = document.createElement('div')
-    app_image.classList.add('app-image')
-    app_image.style.backgroundImage = 'url(./imgs/256x144.png)'
+    var appImage = document.createElement('div')
+    appImage.classList.add('app-image')
+    appImage.style.backgroundImage = 'url(' + appImg + ')'
 
-    image_container.appendChild(overlay)
-    image_container.appendChild(app_image)
+    imageContainer.appendChild(overlay)
+    imageContainer.appendChild(appImage)
 
-    var app_title = document.createElement('div')
-    app_title.classList.add('app-title')
-    app_title.textContent = 'Σβήσιμο οθόνης με σύρσιμο του ποντικιού'
+    var appTitle = document.createElement('div')
+    appTitle.classList.add('app-title')
+    appTitle.textContent = appDescription
 
-    a.appendChild(image_container)
-    a.appendChild(app_title)
+    a.appendChild(imageContainer)
+    a.appendChild(appTitle)
 
     app.appendChild(a)
-    app_container.appendChild(app)
+    appContainer.appendChild(app)
+}
+
+function loadApps() {
+    for (i = 0; i < packages.length; i++) {
+        description = packages[i].description
+        tmp0 = packages[i].homepage
+        tmp1 = tmp0.split('/')
+        tmp2 = tmp1[4].split('#')[0]
+        url = 'https://photodentro.github.io/' + tmp2 + '/'
+        console.log(url)
+        img = url + 'package/256x144.png'
+        console.log(img)
+
+        buildApp(description, url, img)
+    }
+    document.getElementById('demo-app').style.display = "none"
 }

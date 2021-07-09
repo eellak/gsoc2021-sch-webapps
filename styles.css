@@ -133,9 +133,13 @@ body {
 .app {
     display: flex;
     background-color: rgb(255, 255, 255);
-    height: 18em;
-    width: 18em;
+    height: 22em;
+    width: 20em;
     border-radius: 0 0 0.5em 0.5em;
+}
+
+#demo-app {
+    display: block;
 }
 
 .image-container {
@@ -184,6 +188,11 @@ a {
     text-decoration: none;
 }
 
+.app a {
+    text-decoration: none;
+    width: 100%;
+}
+
 .app-image {
     background-image: url('imgs/256x144.png');
     background-size: cover;
@@ -195,7 +204,7 @@ a {
 .app-title {
     position: relative;
     height: 20%;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center;
     color: rgb(49, 49, 49);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
