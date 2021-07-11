@@ -1,26 +1,26 @@
 {
-    "bugs": {
-        "url": "https://gitlab.com/ts.sch.gr/sch-webapps/-/issues"
-    },
-    "description": "Συλλέκτης εκπαιδευτικών ιστοεφαρμογών",
-    "homepage": "https://gitlab.com/ts.sch.gr/sch-webapps",
-    "keywords": [
-        "photodentro",
-        "sch-webapps",
-        "ts.sch.gr"
-    ],
-    "license": "CC-BY-SA-4.0",
-    "name": "@ts.sch.gr/sch-webapps",
-    "publishConfig": {
-        "access": "public",
-        "@ts.sch.gr:registry": "https://gitlab.com/api/v4/projects/26842894/packages/npm/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://gitlab.com/ts.sch.gr/sch-webapps.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "version": "1.0.0"
+  "bugs": {
+    "url": "https://gitlab.com/ts.sch.gr/sch-webapps/-/issues"
+  },
+  "description": "Συλλέκτης εκπαιδευτικών ιστοεφαρμογών",
+  "homepage": "https://gitlab.com/ts.sch.gr/sch-webapps",
+  "keywords": [
+    "photodentro",
+    "sch-webapps",
+    "ts.sch.gr"
+  ],
+  "license": "CC-BY-SA-4.0",
+  "name": "@ts.sch.gr/sch-webapps",
+  "publishConfig": {
+    "access": "public",
+    "@ts.sch.gr:registry": "https://gitlab.com/api/v4/projects/26842894/packages/npm/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ts.sch.gr/sch-webapps.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }

@@ -2,61 +2,61 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Εκκινητής εκπαιδευτικών ιστοεφαρμογών">
-    <meta name="keywords" content="">
-    <meta name="author" content="Artemis Georgopoulou">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Εκκινητής εκπαιδευτικών ιστοεφαρμογών">
+  <meta name="keywords" content="">
+  <meta name="author" content="Artemis Georgopoulou">
 
-    <title>Εκκινητής εκπαιδευτικών ιστοεφαρμογών</title>
+  <title>Εκκινητής εκπαιδευτικών ιστοεφαρμογών</title>
 
-    <!--link rel="icon" type="image/png" href="../imgs/favicon.ico" /-->
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+  <!--link rel="icon" type="image/png" href="../imgs/favicon.ico" /-->
+  <link rel="stylesheet" type="text/css" href="styles.css" />
 
-    <script src="package-merged.js"></script>
-    <script src="frontendjs.js"></script>
+  <script src="package-merged.js"></script>
+  <script src="frontendjs.js"></script>
 </head>
 
 <body onload="loadApps()">
-    <!-- Loading icon -->
-    <div class="loader"></div>
+  <!-- Loading icon -->
+  <div class="loader"></div>
 
-    <!-- Main container for top bar and apps -->
-    <!--Side open-close menu with all categories-->
-    <div id="mySidebar" class="side-menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">Όλα</a>
-        <a href="#">Νηπιαγωγείο</a>
-        <a href="#">Κατηγορία 2</a>
-        <a href="#">Κατηγορία 3</a>
-        <a href="#">Κατηγορία 4</a>
+  <!-- Main container for top bar and apps -->
+  <!--Side open-close menu with all categories-->
+  <div id="mySidebar" class="side-menu">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">Όλα</a>
+    <a href="#">Νηπιαγωγείο</a>
+    <a href="#">Κατηγορία 2</a>
+    <a href="#">Κατηγορία 3</a>
+    <a href="#">Κατηγορία 4</a>
 
-        <div id="admin-button"></div>
+    <div id="admin-button"></div>
+  </div>
+
+  <div class="container">
+    <!--Hamburger menu and page title-->
+    <div class="top-bar">
+      <div class="hamburger" onclick="openNav()"></div>
+      <a href="index.html" id="site-title">Εκκινητής εκπαιδευτικών ιστοεφαρμογών</a>
     </div>
-
-    <div class="container">
-        <!--Hamburger menu and page title-->
-        <div class="top-bar">
-            <div class="hamburger" onclick="openNav()"></div>
-            <a href="index.html" id="site-title">Εκκινητής εκπαιδευτικών ιστοεφαρμογών</a>
-        </div>
-        <div id="app-container">
-            <div class="app" id="demo-app">
-                <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
-                    <div class="image-container">
-                        <div class="overlay">
-                            <div class="start-icon"></div>
-                            <div class="click-start">Click to start</div>
-                        </div>
-
-                        <div class="app-image"></div>
-
-                    </div>
-                    <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
-                </a>
+    <div id="app-container">
+      <div class="app" id="demo-app">
+        <a href="https://www.nationalgeographic.com/environment/article/plastic-pollution" target="_blank">
+          <div class="image-container">
+            <div class="overlay">
+              <div class="start-icon"></div>
+              <div class="click-start">Click to start</div>
             </div>
-        </div>
+
+            <div class="app-image"></div>
+
+          </div>
+          <div class="app-title">Σβήσιμο οθόνης με σύρσιμο του ποντικιού</div>
+        </a>
+      </div>
     </div>
+  </div>
 </body>
 
 </html>
