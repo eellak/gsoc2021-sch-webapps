@@ -33,7 +33,7 @@ function buildApp(appDescription, appURL, appImg) {
 
   var clickStart = document.createElement('div')
   clickStart.classList.add('click-start')
-  clickStart.textContent = 'Click to start'
+  clickStart.textContent = 'Ξεκίνα'
 
   overlay.appendChild(startIcon)
   overlay.appendChild(clickStart)

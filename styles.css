@@ -147,19 +147,17 @@ html, body {
 
 .start-icon {
   position: relative;
-  height: 3em;
-  width: 3em;
-  background: url("imgs/start.png");
+  height: 6em;
+  width: 6em;
+  background: url("imgs/start.svg");
   background-size: cover;
   cursor: pointer;
-  margin-top: 1em;
 }
 
 .click-start {
   position: relative;
   font-size: 1.5em;
   color: rgb(49, 49, 49);
-  margin-top: 1em;
 }
 
 .overlay {
