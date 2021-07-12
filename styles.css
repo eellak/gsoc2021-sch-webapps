@@ -118,7 +118,7 @@ html, body {
 
 #app-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 18em);
+  grid-template-columns: repeat(auto-fill, 20em);
   justify-content: space-evenly;
   grid-gap: 2em 1em;
   margin: 3em;
@@ -137,12 +137,12 @@ html, body {
 }
 
 .image-container {
+  background-color: rgb(109, 119, 130);
   display: flex;
   justify-content: center;
   position: relative;
   height: 70%;
   width: 100%;
-  background-color: pink;
 }
 
 .start-icon {
@@ -192,14 +192,16 @@ a {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: 90%;
-  width: 90%;
-  margin: 0.3em;
+  height: 100%;
+  width: 100%;
 }
 
 .app-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  height: 20%;
+  height: 30%;
   font-size: 1em;
   text-align: center;
   color: rgb(49, 49, 49);
