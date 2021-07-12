@@ -71,3 +71,14 @@ function loadApps() {
   }
   document.getElementById('demo-app').style.display = "none"
 }
+
+function newCategory(newcategory) {
+  // change side menu active category
+  document.querySelector('.active-category').classList.remove('active-category')
+  newcategory.classList.add('active-category') 
+  console.log(document.querySelector('.active-category').innerHTML)
+
+  // clean apps and load new ones
+  document.getElementById('app-container').innerHTML = ''
+  loadApps()
+}
