@@ -37,7 +37,13 @@ function merge_package_json() {
 
     });
 
-    exports.packages = packages;
-    console.log(packages.length);
+    // exports.packages = packages;
+    console.log(packages[0]);
+    var superString = 'packages = [';
+    for (i = 0; i < packages.length - 1; i++) {
+        superString += JSON.stringify(packages[i]) + ', ';
+    }
+    superString += JSON.stringify(packages[packages.length - 1]) + ']';
+    fs.writeFileSync('package-merged.js', superString);
 }
 merge_package_json();
