@@ -13,7 +13,7 @@ function closeNav() {
 // load dynamically into container every app needed
 function buildApp(appDescription, appURL, appImg) {
     var appContainer = document.getElementById('app-container')
-    console.log(appContainer.childNodes)
+        //console.log(appContainer.childNodes)
 
     var app = document.createElement('div')
     app.classList.add('app')
@@ -63,9 +63,9 @@ function loadApps() {
         tmp1 = tmp0.split('/')
         tmp2 = tmp1[4].split('#')[0]
         url = 'https://photodentro.github.io/' + tmp2 + '/'
-        console.log(url)
+            //console.log(url)
         img = url + 'package/256x144.png'
-        console.log(img)
+            //console.log(img)
 
         buildApp(description, url, img)
     }
