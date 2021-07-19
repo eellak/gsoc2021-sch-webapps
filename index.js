@@ -5,7 +5,9 @@ function merge_package_json() {
     const path = require('path')
     const folderPath = '../collection/node_modules/';
 
-    console.log(fs.existsSync(folderPath));
+    let count = 0;
+
+    console.log("Searching for apps in 'collection' file to add...");
     fs.readdirSync(folderPath).forEach(file => {
         fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
             fs.readdirSync(folderPath + path.basename(file) + "/" + path.basename(file2)).forEach(file3 => {
@@ -16,14 +18,11 @@ function merge_package_json() {
                     let rawdata = fs.readFileSync(jsonPath);
                     let jsondata = JSON.parse(rawdata);
                     let keyword = false;
-                    if (jsondata.keywords.hasOwnProperty("photodentro")) {
-                        console.log("YEY");
-                    }
                     for (i = 0; i < jsondata.keywords.length; i++) {
-                        console.log(jsondata.keywords[i]);
-                        if (jsondata.keywords[i] == "photodentro" || jsondata.keywords[i] == "ts.sch.gr")
+                        if (jsondata.keywords[i] == "photodentro" || jsondata.keywords[i] == "ts.sch.gr") {
                             keyword = true;
-                        break;
+                            break;
+                        }
                     }
                     let desc = jsondata.hasOwnProperty('description') &&
                         jsondata.description[0] != "" &&
@@ -33,6 +32,7 @@ function merge_package_json() {
                     if (keyword && desc) {
                         // json qualifies
                         packages.push(jsondata);
+                        console.log("Added " + jsondata.description);
                     }
 
                 }
@@ -43,7 +43,7 @@ function merge_package_json() {
     });
 
     // exports.packages = packages;
-    console.log(packages.length);
+    console.log("Total apps added: " + packages.length);
     var superString = 'packages = [';
     for (i = 0; i < packages.length - 1; i++) {
         superString += JSON.stringify(packages[i]) + ', ';
