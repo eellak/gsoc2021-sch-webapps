@@ -1,4 +1,7 @@
 {
+    "bin": {
+        "sch-webapps": "index.js"
+    },
     "bugs": {
         "url": "https://gitlab.com/ts.sch.gr/sch-webapps/-/issues"
     },
@@ -21,7 +24,7 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "postinstall": "node index.js ; cd ../collection ; pwd ; mkdir .npmrc ; ls ; npm config set registry=https://gitlab.com/api/v4/packages/npm/ ; npm get registry"
+        "postinstall": "echo CALL-FUNCTION-TO-CREATE-NPMJS-ETC"
     },
     "version": "1.0.0"
 }

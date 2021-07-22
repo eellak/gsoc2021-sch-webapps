@@ -1,0 +1,8 @@
+{
+    "description": "Ιδιωτική συλλογή",
+    "license": "CC-BY-SA-4.0",
+    "scripts": {
+        "merge": "echo HERE; npm config set registry=https://gitlab.com/api/v4/packages/npm/ ; npm get registry"
+    },
+    "version": "1.0.0"
+}
