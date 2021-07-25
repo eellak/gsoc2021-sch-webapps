@@ -19,9 +19,9 @@ function merge_package_json() {
 
     //console.log("Searching for apps in 'collection' file to add...");
     fs.readdirSync(folderPath).forEach(file => {
-        console.log("1: " + path.dirname(folderPath + path.basename(file)));
+        //console.log("1: " + path.dirname(folderPath + path.basename(file)));
         fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-            console.log("2: " + folderPath + path.basename(file) + "/" + path.basename(file2));
+            //console.log("2: " + folderPath + path.basename(file) + "/" + path.basename(file2));
             if (file2 == "package.json") {
                 let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
 
@@ -46,7 +46,7 @@ function merge_package_json() {
                 if (keyword && desc) {
                     // json qualifies
                     packages.push(jsondata);
-                    console.log("   - Added " + jsondata.description);
+                    console.log("   - Στην λίστα: " + jsondata.description);
                 }
 
             }
@@ -159,7 +159,7 @@ function menu() {
             case '3':
                 // Αφαίρεση πακέτων
                 rl.question('Πληκτρολογήστε τα πακέτα: ', (oldApp) => {
-                    delete(oldApp);
+                    del(oldApp);
                     merge_package_json();
                     menu();
                 });
