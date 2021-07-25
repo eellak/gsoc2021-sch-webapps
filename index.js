@@ -4,20 +4,26 @@ const { exit } = require('process');
 const http = require('http');
 const fs = require('fs');
 const path = require('path')
+const { spawnSync } = require('child_process');
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 
 function merge_package_json() {
     let packages = [];
 
-    const fs = require('fs');
-    const path = require('path')
-    const folderPath = '../collection/node_modules/@ts.sch.gr/';
+    const folderPath = 'node_modules/@ts.sch.gr/';
 
     //console.log("Searching for apps in 'collection' file to add...");
     fs.readdirSync(folderPath).forEach(file => {
+        console.log("1: " + path.dirname(folderPath + path.basename(file)));
         fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-            // fs.readdirSync(folderPath + path.basename(file) + "/" + path.basename(file2)).forEach(file3 => {
+            console.log("2: " + folderPath + path.basename(file) + "/" + path.basename(file2));
             if (file2 == "package.json") {
-                let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2); // + "/" + path.basename(file3);
+                let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
 
                 // reading each json and if it qualifies, we add it to var packages[]
                 let rawdata = fs.readFileSync(jsonPath);
@@ -40,12 +46,10 @@ function merge_package_json() {
                 if (keyword && desc) {
                     // json qualifies
                     packages.push(jsondata);
-                    //console.log("   - Added " + jsondata.description);
+                    console.log("   - Added " + jsondata.description);
                 }
 
             }
-
-            //});
         });
 
     });
@@ -63,7 +67,7 @@ function merge_package_json() {
 function printAllApps() {
     let packages = [];
 
-    const folderPath = '../collection/node_modules/@ts.sch.gr/';
+    const folderPath = 'node_modules/@ts.sch.gr/';
 
     console.log("Βρέθηκαν οι ακόλουθες εφαρμογές:");
     fs.readdirSync(folderPath).forEach(file => {
@@ -92,6 +96,7 @@ function printAllApps() {
 }
 
 function display() {
+    console.log(" ~~ MENU ~~ ");
     console.log("0. Έξοδος");
     console.log("1. Προβολή εγκατεστημένων πακέτων");
     console.log("2. Προσθήκη πακέτων");
@@ -100,13 +105,11 @@ function display() {
 }
 
 function add(newApp) {
-    const { spawn } = require('child_process');
-    spawn('npm install @ts.sch.gr/' + newApp, { stdio: 'inherit', shell: true });
+    spawnSync('npm install @ts.sch.gr/' + newApp, { stdio: 'inherit', shell: true });
 }
 
 function del(oldApp) {
-    const { spawn } = require('child_process');
-    spawn('npm remove @ts.sch.gr/' + oldApp, { stdio: 'inherit', shell: true });
+    spawnSync('npm remove @ts.sch.gr/' + oldApp, { stdio: 'inherit', shell: true });
 }
 
 function startServer() {
@@ -130,45 +133,48 @@ function startServer() {
 }
 
 function menu() {
-    var choice;
-    do {
-        display();
+    //var choice;
+    display()
 
-        const prompt = require('prompt-sync')();
-        const choice = parseInt(prompt('Πληκτρολόγησε 0-4: '));
+    // 'Πληκτρολόγησε 0-4: '
+    rl.question(`Please enter a choice: `, (choice) => {
 
         switch (choice) {
-            case 0:
+            case '0':
                 // Έξοδος
                 exit();
                 break;
-            case 1:
+            case '1':
                 // Προβολή εγκατεστημένων πακέτων
                 printAllApps();
                 break;
-            case 2:
+            case '2':
                 // Προσθήκη πακέτων
-                const newApp = prompt('Πληκτρολόγησε το όνομα του πακέτου της εφαρμογής που θέλετε να εγκαταστήσετε (πχ. l10772 - δέχεται μόνο ένα όρισμα προς το παρόν): ');
-                add(newApp);
-                merge_package_json();
-                break;
-            case 3:
+                rl.question('Πληκτρολογήστε τα πακέτα: ', (newApp) => {
+                    add(newApp);
+                    merge_package_json();
+                    menu();
+                });
+                return;
+            case '3':
                 // Αφαίρεση πακέτων
-                const oldApp = prompt('Πληκτρολόγησε το όνομα του πακέτου της εφαρμογής που θέλετε να αφαιρέσετε (πχ. l10772 - δέχεται μόνο ένα όρισμα προς το παρόν): ');
-                del(oldApp);
-                merge_package_json();
-                break;
-            case 4:
+                rl.question('Πληκτρολογήστε τα πακέτα: ', (oldApp) => {
+                    delete(oldApp);
+                    merge_package_json();
+                    menu();
+                });
+                return;
+            case '4':
                 // Εκκίνηση web server
-                console.log("YOYOY");
-                startServer();
+                console.log("Not working yet!");
+                //startServer();
                 break;
             default:
                 // Λάθος είσοδος
                 console.log("Λάθος λειτουργία, πληκτρολογήστε έναν αριθμό από 0-4.")
         }
-    }
-    while (choice != 0);
+        menu();
+    });
 }
 
 menu();

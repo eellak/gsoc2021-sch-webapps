@@ -27,8 +27,5 @@
         "postinstall": "echo CALL-FUNCTION-TO-CREATE-NPMJS-ETC"
     },
     "version": "1.0.0",
-    "dependencies": {
-        "@ts.sch.gr/l10772": "^1.0.0",
-        "prompt-sync": "^4.2.0"
-    }
+    "dependencies": {}
 }

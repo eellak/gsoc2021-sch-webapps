@@ -59,10 +59,10 @@ function buildApp(appDescription, appURL, appImg) {
 function loadApps() {
     for (i = 0; i < packages.length; i++) {
         description = packages[i].description
-        tmp0 = packages[i].homepage
+        tmp0 = packages[i].name
         tmp1 = tmp0.split('/')
-        tmp2 = tmp1[4].split('#')[0]
-        url = 'https://photodentro.github.io/' + tmp2 + '/'
+        tmp2 = tmp1[1] //.split('#')[0]
+        url = '../' + tmp2 + '/'
             //console.log(url)
         img = url + 'package/256x144.png'
             //console.log(img)
