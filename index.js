@@ -17,11 +17,8 @@ function merge_package_json() {
 
     const folderPath = 'node_modules/@ts.sch.gr/';
 
-    //console.log("Searching for apps in 'collection' file to add...");
     fs.readdirSync(folderPath).forEach(file => {
-        //console.log("1: " + path.dirname(folderPath + path.basename(file)));
         fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-            //console.log("2: " + folderPath + path.basename(file) + "/" + path.basename(file2));
             if (file2 == "package.json") {
                 let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
 
@@ -55,7 +52,7 @@ function merge_package_json() {
     });
 
     exports.packages = packages;
-    //console.log("Total apps added: " + packages.length);
+    console.log("Συνολικές εφαρμογές στην λίστα: " + packages.length);
     var superString = 'packages = [';
     for (i = 0; i < packages.length - 1; i++) {
         superString += JSON.stringify(packages[i]) + ', ';
@@ -88,8 +85,6 @@ function printAllApps() {
                     console.log("   - " + path.basename(file) + ": " + jsondata.description);
                 }
             }
-
-            //});
         });
 
     });
@@ -133,11 +128,9 @@ function startServer() {
 }
 
 function menu() {
-    //var choice;
     display()
 
-    // 'Πληκτρολόγησε 0-4: '
-    rl.question(`Please enter a choice: `, (choice) => {
+    rl.question(`Πληκτρολόγησε 0-4 `, (choice) => {
 
         switch (choice) {
             case '0':

@@ -13,7 +13,6 @@ function closeNav() {
 // load dynamically into container every app needed
 function buildApp(appDescription, appURL, appImg) {
     var appContainer = document.getElementById('app-container')
-        //console.log(appContainer.childNodes)
 
     var app = document.createElement('div')
     app.classList.add('app')
@@ -60,12 +59,9 @@ function loadApps() {
     for (i = 0; i < packages.length; i++) {
         description = packages[i].description
         tmp0 = packages[i].name
-        tmp1 = tmp0.split('/')
-        tmp2 = tmp1[1] //.split('#')[0]
-        url = '../' + tmp2 + '/'
-            //console.log(url)
+        tmp1 = tmp0.split('/')[1]
+        url = '../' + tmp1 + '/'
         img = url + 'package/256x144.png'
-            //console.log(img)
 
         buildApp(description, url, img)
     }
@@ -82,8 +78,3 @@ function newCategory(newcategory) {
     document.getElementById('app-container').innerHTML = ''
     loadApps()
 }
-
-// merged:
-// var module = require('./index.js');
-// const packages = module.packages;
-// console.log(packages[0]);
