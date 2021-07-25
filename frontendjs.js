@@ -60,10 +60,10 @@ function loadApps() {
         description = packages[i].description
         tmp0 = packages[i].name
         tmp1 = tmp0.split('/')[1]
-        url = '../' + tmp1 + '/' + "index.html"
+        url = '../' + tmp1 + '/'
         img = url + 'package/256x144.png'
 
-        buildApp(description, url, img)
+        buildApp(description, url + "index.html", img)
     }
     document.getElementById('demo-app').style.display = "none"
 }
