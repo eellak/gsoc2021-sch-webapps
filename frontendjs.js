@@ -60,7 +60,7 @@ function loadApps() {
         description = packages[i].description
         tmp0 = packages[i].name
         tmp1 = tmp0.split('/')[1]
-        url = '../' + tmp1 + '/'
+        url = '../' + tmp1 + '/' + "index.html"
         img = url + 'package/256x144.png'
 
         buildApp(description, url, img)
