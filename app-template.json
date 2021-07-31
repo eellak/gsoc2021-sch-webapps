@@ -1,0 +1,27 @@
+{
+    "author": "Ομάδα Προσχολικής Εκπαίδευσης (https://github.com/photodentro)",
+    "browser": "index.html",
+    "bugs": {
+        "url": "https://github.com/photodentro/title"
+    },
+    "description": "description",
+    "homepage": "https://github.com/photodentro/title#readme",
+    "keywords": [
+        "photodentro",
+        "ts.sch.gr",
+        "sch-webapps"
+    ],
+    "license": "CC-BY-SA-4.0",
+    "name": "@ts.sch.gr/lxxxxx",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/photodentro/title.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "thumbnails": [
+        "package/256x144.png"
+    ],
+    "version": "1.0.0"
+}

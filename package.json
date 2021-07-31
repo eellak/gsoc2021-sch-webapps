@@ -23,5 +23,10 @@
         "postinstall": "echo CALL-FUNCTION-TO-CREATE-NPMJS-ETC"
     },
     "version": "1.0.0",
-    "dependencies": {}
+    "dependencies": {
+        "eyes": "^0.1.8",
+        "fast-xml-parser": "^3.19.0",
+        "fs": "0.0.1-security",
+        "xml2js": "^0.4.23"
+    }
 }
