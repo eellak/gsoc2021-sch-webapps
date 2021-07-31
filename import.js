@@ -39,6 +39,9 @@ function makeJSON(result) {
     var packageName = // l10772
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].header[0].identifier[0]).split('/')[1].split('"')[0];
 
+    var otherNumber =
+        JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].header[0].identifier[0]).split('/')[0].split('lor:')[1];
+
     var description = // "Δημιουργώ τροφικές αλυσίδες"
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].description[0].string[0]['_']).replace('"', '');
 
@@ -54,7 +57,7 @@ function makeJSON(result) {
     // console.log("\n\n" + JSON.stringify(jsonTemplate));
     jsonTemplate.bugs.url = "https://github.com/photodentro/" + title;
     jsonTemplate.description = description;
-    jsonTemplate.homepage = "https://github.com/photodentro/" + title + "#readme";
+    jsonTemplate.homepage = "http://photodentro.edu.gr/lor/r/" + otherNumber + "/" + packageName;
     jsonTemplate.name = "@ts.sch.gr/" + packageName;
     jsonTemplate.repository.url = "git+https://github.com/photodentro/" + title + ".git";
     console.log(JSON.stringify(jsonTemplate));
