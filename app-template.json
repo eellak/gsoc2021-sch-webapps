@@ -1,27 +1,12 @@
 {
-    "author": "Ομάδα Προσχολικής Εκπαίδευσης (https://github.com/photodentro)",
     "browser": "index.html",
-    "bugs": {
-        "url": "https://github.com/photodentro/title"
-    },
-    "description": "description",
-    "homepage": "https://github.com/photodentro/title#readme",
-    "keywords": [
-        "photodentro",
-        "ts.sch.gr",
-        "sch-webapps"
-    ],
+    "bugs": "http://photodentro.edu.gr/lor/feedback/form.jsp",
+    "description": "Δραστηριότητα πρακτικής και εξάσκησης...",
+    "homepage": "http://photodentro.edu.gr/lor/r/8521/10761",
+    "icon": "package.png",
+    "keywords": [],
     "license": "CC-BY-SA-4.0",
-    "name": "@ts.sch.gr/lxxxxx",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/photodentro/title.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "thumbnails": [
-        "package/256x144.png"
-    ],
+    "name": "@ts.sch.gr/l10761",
+    "repository": "http://photodentro.edu.gr/lor/retrieve/58346/pattern_v1.0_pidx0054967.zip",
     "version": "1.0.0"
 }

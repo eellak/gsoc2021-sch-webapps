@@ -37,8 +37,8 @@ function merge_package_json() {
 
                 let desc = jsondata.hasOwnProperty('description') &&
                     jsondata.description[0] != "" &&
-                    jsondata.hasOwnProperty('thumbnails') &&
-                    jsondata.thumbnails[0] != "";
+                    jsondata.hasOwnProperty('icon') &&
+                    jsondata.icon[0] != "";
 
                 if (keyword && desc) {
                     // json qualifies

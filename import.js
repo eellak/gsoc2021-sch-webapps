@@ -1,41 +1,59 @@
-// process.argv is an array containing the command line arguments. 
-// The first element will be 'node', the second element will be the 
-// name of the JavaScript file. The next elements will be any 
-// additional command line arguments.
+#!/usr/bin/env node
 
-// process.argv.forEach(function(val, index, array) {
-//     console.log(index + ': ' + val);
-// });
+var path = require('path');
+var appDir = path.dirname(require.main.filename);
 
-let url = process.argv[2];
-
-// installed "npm install fast-xml-parser"
-var parser = require('fast-xml-parser');
-var eyes = require('eyes');
 var http = require('http');
 var fs = require('fs');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 
-parser.on('error', function(err) { console.log('Parser error', err); });
-
-function getXML() {
+var download = function (url, callback) {
     var data = '';
-    http.get(url, function(res) {
+    http.get(url, function (res) {
         if (res.statusCode >= 200 && res.statusCode < 400) {
-            res.on('data', function(data_) { data += data_.toString(); });
-            res.on('end', function() {
+            res.on('data', function (data_) { data += data_.toString(); });
+            res.on('end', function () {
                 //console.log('data', data);
-                parser.parseString(data, function(err, result) {
-                    // console.log('FINISHED', JSON.stringify(result));
-                    makeJSON(result);
-                });
+                callback(data);
             });
+        }
+    });
+};
+
+fs.writeFileIfNotExist = function (fname, contents, options, callback) {
+    if (typeof options === "function") {
+        // it appears that it was called without the options argument
+        callback = options;
+        options = {};
+    }
+    options = options || {};
+    // force wx flag so file will be created only if it does not already exist
+    options.flag = 'wx';
+    fs.writeFile(fname, contents, options, function (err) {
+        var existed = false;
+        if (err && err.code === 'EEXIST') {
+            // This just means the file already existed.  We
+            // will not treat that as an error, so kill the error code
+            err = null;
+            existed = true;
+        }
+        if (typeof callback === "function") {
+            callback(err, existed);
         }
     });
 }
 
-function makeJSON(result) {
+parser.on('error', function (err) { console.log('Parser error', err); });
+
+function onXMLDownloaded(data) {
+    parser.parseString(data, function (err, result) {
+        //console.log('FINISHED', JSON.stringify(result));
+        makeFiles(result);
+    });
+}
+
+function makeFiles(result) {
     var packageName = // l10772
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].header[0].identifier[0]).split('/')[1].split('"')[0];
 
@@ -43,25 +61,75 @@ function makeJSON(result) {
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].header[0].identifier[0]).split('/')[0].split('lor:')[1];
 
     var description = // "Δημιουργώ τροφικές αλυσίδες"
-        JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].description[0].string[0]['_']).replace('"', '');
+        JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].description[0].string[0]['_']).replace('"', '').replace(/\\r/g, '').replace(/\\n/g, '\n');
 
     var title = // foodchain
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].title[0].string[0]['_']).replace('"', '');
 
-    //console.log(title);
+    var image = JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].relation[1].resource[0].identifier[0].entry[0]).replace(/"/g, '');
+
+    var keywords = [];
+    var kwPath = result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].keyword;
+    for (var kw in kwPath) {
+        keywords.push(JSON.stringify(kwPath[kw].string[0]['_']).replace(/"/g, ''));
+    }
+
+    var homepage = "http://photodentro.edu.gr/lor/r/" + otherNumber + "/" + packageName;
+    var downloadLink = JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].technical[0].location['0']).replace(/"/g, '');
+
+    //console.log(downloadLink);
 
     // get json template
-    let rawdata = fs.readFileSync('app-template.json');
+    let rawdata = fs.readFileSync(appDir + '/app-template.json');
     let jsonTemplate = JSON.parse(rawdata);
 
     // console.log("\n\n" + JSON.stringify(jsonTemplate));
-    jsonTemplate.bugs.url = "https://github.com/photodentro/" + title;
     jsonTemplate.description = description;
-    jsonTemplate.homepage = "http://photodentro.edu.gr/lor/r/" + otherNumber + "/" + packageName;
-    jsonTemplate.name = "@ts.sch.gr/" + packageName;
-    jsonTemplate.repository.url = "git+https://github.com/photodentro/" + title + ".git";
-    console.log(JSON.stringify(jsonTemplate));
+    jsonTemplate.homepage = homepage;
+    jsonTemplate.name = "@ts.sch.gr/l" + packageName;
+    jsonTemplate.keywords = keywords;
+    jsonTemplate.repository = downloadLink;
+    //console.log(JSON.stringify(jsonTemplate));
 
+    fs.writeFileIfNotExist("package.json", JSON.stringify(jsonTemplate, null, 4) + "\n", function (err, existed) {
+        if (err) {
+            // error here
+        } else if (existed) {
+            // data was written or file already existed
+            // existed flag tells you which case it was
+            console.log("package.json already existed, nothing happened");
+        } else {
+            console.log("package.json created");
+            fs.writeFile("package.js", "package =\n" + JSON.stringify(jsonTemplate, null, 4) + "\n", function (err, existed) { });
+        }
+    });
+
+    // MAKE README
+    var readme =
+        "[![Μικρογραφία](" + image + ")](" + homepage + ")"
+        + "\n\n**ΤΙΤΛΟΣ:** " + title + "\n\n**ΔΙΕΥΘΥΝΣΗ ΑΝΑΦΟΡΑΣ:** " + homepage
+        + "\n\n**ΔΙΕΥΘΥΝΣΗ ΦΥΣΙΚΟΥ ΠΟΡΟΥ:** http://photodentro.edu.gr/v/item/ds/" + otherNumber + "/" + packageName
+        + "\n\n**ΔΙΕΥΘΥΝΣΗ ΛΗΨΗΣ:** " + downloadLink
+        + "\n\n**KEYWORDS:** " + keywords + "\n\n**ΠΕΡΙΓΡΑΦΗ:** " + description + "\n";
+
+    //console.log(readme);
+    fs.writeFileIfNotExist("README.md", readme, function (err, existed) {
+        if (err) {
+            // error here
+        } else if (existed) {
+            // data was written or file already existed
+            // existed flag tells you which case it was
+            console.log("README.md already existed, nothing happened");
+        } else {
+            console.log("README.md created");
+        }
+    });
+
+    // DOWNLOAD IMAGE
+    download(image, function (data) {
+        fs.writeFileSync('package.png', data);
+        console.log('Package image downloaded');
+    });
 }
 
-getXML();
+download(process.argv[2], onXMLDownloaded);
