@@ -9,13 +9,15 @@ var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 
 var download = function (url, callback) {
-    var data = '';
+    var data = [];
     http.get(url, function (res) {
         if (res.statusCode >= 200 && res.statusCode < 400) {
-            res.on('data', function (data_) { data += data_.toString(); });
+            res.on('data', function (data_) {
+                data.push(data_);
+            });
             res.on('end', function () {
                 //console.log('data', data);
-                callback(data);
+                callback(Buffer.concat(data));
             });
         }
     });
@@ -61,7 +63,7 @@ function makeFiles(result) {
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].header[0].identifier[0]).split('/')[0].split('lor:')[1];
 
     var description = // "Δημιουργώ τροφικές αλυσίδες"
-        JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].description[0].string[0]['_']).replace('"', '').replace(/\\r/g, '').replace(/\\n/g, '\n');
+        JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].description[0].string[0]['_']).replace(/"/g, '').replace(/\\r/g, '').replace(/\\n/g, '\n');
 
     var title = // foodchain
         JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].general[0].title[0].string[0]['_']).replace('"', '');
@@ -76,8 +78,6 @@ function makeFiles(result) {
 
     var homepage = "http://photodentro.edu.gr/lor/r/" + otherNumber + "/" + packageName;
     var downloadLink = JSON.stringify(result["OAI-PMH"].GetRecord[0].record[0].metadata[0].lom[0].technical[0].location['0']).replace(/"/g, '');
-
-    //console.log(downloadLink);
 
     // get json template
     let rawdata = fs.readFileSync(appDir + '/app-template.json');
@@ -132,4 +132,9 @@ function makeFiles(result) {
     });
 }
 
-download(process.argv[2], onXMLDownloaded);
+// find xml url
+//var initurl = process.argv[2].split('/r/')[1];
+//var initurl = process.argv[2].substring(1);
+var xmlurl = "http://photodentro.edu.gr/oai-lor/request?verb=GetRecord&identifier=oai:photodentro:lor:8521/" + process.argv[2] + "&metadataPrefix=oai_lom";
+// parse xml
+download(xmlurl, onXMLDownloaded);
