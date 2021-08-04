@@ -1,7 +1,9 @@
 {
+    "author": "Φωτόδεντρο (http://photodentro.edu.gr)",
     "browser": "index.html",
     "bugs": "http://photodentro.edu.gr/lor/feedback/form.jsp",
-    "description": "Δραστηριότητα πρακτικής και εξάσκησης...",
+    "description": "Αναγνώριση και αναπαραγωγή μοτίβου",
+    "descriptionLong": "Δραστηριότητα πρακτικής και εξάσκησης με στόχο ...",
     "homepage": "http://photodentro.edu.gr/lor/r/8521/10761",
     "icon": "package.png",
     "keywords": [],
