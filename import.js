@@ -55,6 +55,13 @@ function onXMLDownloaded(data) {
   });
 }
 
+// TODO: the next image isn't always available; verify it manually
+function nextImage(image) {
+  var splitted = image.split('/');
+  splitted[5] = parseInt(splitted[5]) + 1;
+  return splitted.join('/');
+}
+
 function makeFiles(result) {
   var packageName = // 10761
     JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].header[0].identifier[0]).split('/')[1].split('"')[0];
@@ -68,7 +75,7 @@ function makeFiles(result) {
   var title = // Αναγνώριση και αναπαραγωγή μοτίβου
     JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].general[0].title[0].string[0]['_']).replace(/"/g, '');
 
-  var image = JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].relation[1].resource[0].identifier[0].entry[0]).replace(/"/g, '');
+  var image = nextImage(JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].relation[1].resource[0].identifier[0].entry[0]).replace(/"/g, ''));
 
   var keywords = [];
   var kwPath = result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].general[0].keyword;
@@ -87,7 +94,7 @@ function makeFiles(result) {
   jsonTemplate.description = title;
   jsonTemplate.descriptionLong = description;
   jsonTemplate.homepage = homepage;
-  jsonTemplate.name = '@ts.sch.gr/l' + packageName;
+  jsonTemplate.name = otherNumber + '-' + packageName;
   jsonTemplate.keywords = keywords;
   jsonTemplate.repository = downloadLink;
 
@@ -114,9 +121,21 @@ function makeFiles(result) {
   });
 }
 
-// find xml url
-//var initurl = process.argv[2].split('/r/')[1];
-//var initurl = process.argv[2].substring(1);
-var xmlurl = 'http://photodentro.edu.gr/oai-lor/request?verb=GetRecord&identifier=oai:photodentro:lor:8521/' + process.argv[2] + '&metadataPrefix=oai_lom';
+function xmlurl(sid) {
+  // Convert string id to an array id
+  var aid = sid.replace('-', '/').split('/');
+  var url = ''
+  switch (aid[0]) {
+    case '8521': url = 'http://photodentro.edu.gr/oai-lor/request?verb=GetRecord&identifier=oai:photodentro:lor:{1}/{2}&metadataPrefix=oai_lom'; break;
+    case '8531': url = 'http://photodentro.edu.gr/oai-edusoft/request?verb=GetRecord&identifier=oai:photodentro:edusoft:{1}/{2}&metadataPrefix=oai_lom'; break;
+    case '8522': url = 'http://photodentro.edu.gr/oai-video/request?verb=GetRecord&identifier=oai:photodentro:educationalvideo:{1}/{2}&metadataPrefix=oai_lom'; break;
+    case '8525': url = 'http://photodentro.edu.gr/oai-ugc/request?verb=GetRecord&identifier=oai:photodentro:ugc:{1}/{2}&metadataPrefix=oai_lom'; break;
+    default: throw new Error('Wrong parameter');
+  }
+  url = url.replace('{1}', aid[0]).replace('{2}', aid[1])
+  console.log('XML package info at:', url);
+  return url;
+}
+
 // parse xml
-download(xmlurl, onXMLDownloaded);
+download(xmlurl(process.argv[2]), onXMLDownloaded);
