@@ -17,42 +17,30 @@
 </head>
 
 <body onload="makePackages()">
-    <!-- Main container for top bar and apps -->
-    <!--Side open-close menu with all categories-->
-    <div id="mySidebar" class="side-menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#" onclick="newCategory(this)" class="active-category">Όλα</a>
-        <!-- <a href="#" onclick="newCategory(this)">Νηπιαγωγείο</a>
-        <a href="#" onclick="newCategory(this)">Δημοτικό</a>
-        <a href="#" onclick="newCategory(this)">Γυμνάσιο</a>
-        <a href="#" onclick="newCategory(this)">Λύκειο/ΕΠΑΛ</a> -->
-
-        <div id="admin-button"></div>
-    </div>
-
     <div class="container">
         <div class="top-bar">
             <div class="hamburger" onclick="openNav()"></div>
             <a href="index.html" id="site-title">Εκκινητής εκπαιδευτικών ιστοεφαρμογών</a>
         </div>
+        <div id="mySidebar" class="side-menu">
+            <div id="categories">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#" onclick="newCategory(this)" class="active-category">Όλα</a>
+            </div>
+
+            <div id="options">
+                Καρτέλες
+                <div>
+                    <div id="minus" onclick="changeTabs(1)"></div>
+                    <div id="num">num</div>
+                    <div id="plus" onclick="changeTabs(2)"></div>
+                </div>
+            </div>
+        </div>
         <div id="app-container">
-
-            path: ../collection/node_modules/, Δημοτικό: 8521-10759 8521-10760, Γυμνάσιο: 8521-10761 8521-10762
-
-            <!-- /<div class="app">
-                <a href="" target="_blank">
-                    <div class="image-container">
-                        <div class="overlay">
-                            <div class="start-icon"></div>
-                            <div class="click-start">Click to start</div>
-                        </div>
-
-                        <div class="app-image"></div>
-
-                    </div>
-                    <div class="app-title">Δεν έχεις εγκατεστημένα πακέτα</div>
-                </a>
-            /</div> -->
+            path: ../collection/node_modules/, Δημοτικό: 8521-10759 8521-10760, Γυμνάσιοο: 8521-10761 8521-10762, Δημοοτικό: 8521-10759 8521-10760, Γυομνάσιο: 8521-10761 8521-10762, Δοημοτικό: 8521-10759 8521-10760, Γυμνοοάσιο: 8521-10761 8521-10762, Δοοημοτικό:
+            8521-10772 8521-10760, Γυμνοάσιο: 8521-10761 8521-10762, Δηημοτικό: 8521-10759 8521-10760, Γυημνάσηιοο: 8521-10761 8521-10762, Δημοηηοτικό: 8521-10759 8521-10760, Γυομηηηνάσιο: 8521-10761 8521-10762, Δηοημοτικό: 8521-10759 8521-10760, Γυμηηνοοάσιο:
+            8521-10761 8521-10762, Δοοημοτηικό: 8521-10772 8521-10760, Γυμνοάηησιο: 8521-10761 8521-10762, λαλαλαλλα: 8521-10761 8521-10762, λαλαddλαλλα: 8521-10761 8521-10762, λαλαλαλddλα: 8521-10761 8521-10762
         </div>
     </div>
 </body>

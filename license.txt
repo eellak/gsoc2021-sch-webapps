@@ -1,2 +1,4 @@
 Start icon : https://icons.getbootstrap.com/icons/play-fill/
 Hamburger menu : https://icons.getbootstrap.com/icons/list/
+plus: https://icons.getbootstrap.com/icons/plus/
+minus: https://icons.getbootstrap.com/icons/dash/

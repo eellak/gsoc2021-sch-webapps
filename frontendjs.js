@@ -1,4 +1,5 @@
 //const { packages } = require(".")
+var apptabs = 5;
 var webapps = [
     path = '.',
     tabs = {
@@ -25,7 +26,6 @@ var webapps = [
 /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
 function openNav() {
     document.getElementById('mySidebar').style.width = '250px'
-        // document.querySelectorAll('container').style.marginLeft = '250px'
 }
 
 /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
@@ -33,51 +33,6 @@ function closeNav() {
     document.getElementById('mySidebar').style.width = '0'
     document.getElementById('container').style.marginLeft = '0'
 }
-
-// load dynamically into container every app needed
-// function buildApp(appDescription, appURL, appImg) {
-//     var appContainer = document.getElementById('app-container')
-
-//     var app = document.createElement('div')
-//     app.classList.add('app')
-
-//     var a = document.createElement('a')
-//     a.href = appURL
-//     a.target = '_blank'
-
-//     var imageContainer = document.createElement('div')
-//     imageContainer.classList.add('image-container')
-
-//     var overlay = document.createElement('div')
-//     overlay.classList.add('overlay')
-
-//     var startIcon = document.createElement('div')
-//     startIcon.classList.add('start-icon')
-
-//     var clickStart = document.createElement('div')
-//     clickStart.classList.add('click-start')
-//     clickStart.textContent = 'Ξεκίνα'
-
-//     overlay.appendChild(startIcon)
-//     overlay.appendChild(clickStart)
-
-//     var appImage = document.createElement('div')
-//     appImage.classList.add('app-image')
-//     appImage.style.backgroundImage = 'url(' + appImg + ')'
-
-//     imageContainer.appendChild(overlay)
-//     imageContainer.appendChild(appImage)
-
-//     var appTitle = document.createElement('div')
-//     appTitle.classList.add('app-title')
-//     appTitle.textContent = appDescription
-
-//     a.appendChild(imageContainer)
-//     a.appendChild(appTitle)
-
-//     app.appendChild(a)
-//     appContainer.appendChild(app)
-// }
 
 function makePackages() {
     // READ HTML: path, categories, apps
@@ -126,7 +81,9 @@ function loadCategories() {
     for (cat in webapps[1]) {
         ih.push(sformat('<a href="#" onclick="newCategory(this)">{}</a>', cat));
     }
-    ge('mySidebar').innerHTML += ih.join('\n');
+    ge('categories').innerHTML += ih.join('\n');
+    console.log(ge('num').innerText)
+    ge('num').innerText = apptabs;
 }
 
 function onScriptsLoaded(activeCategory) {
@@ -173,4 +130,11 @@ function newCategory(newcategory) {
     // clean apps and load new ones
     document.getElementById('app-container').innerHTML = ''
     onScriptsLoaded(newcategory.innerHTML);
+}
+
+// 0: minus, 1: plus
+function changeTabs(sign) {
+    apptabs += (-1) ** sign
+    console.log(apptabs)
+    ge('num').innerText = apptabs;
 }
