@@ -1,207 +1,214 @@
-html, body {
-  height: 100%;
-  padding: 0px;
-  margin: 0px;
-  font-family: Georgia, serif;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  background-color: rgb(194, 194, 194);
+html,
+body {
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    font-family: Georgia, serif;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    background-color: rgb(194, 194, 194);
 }
 
 .container {
-  height: 100%;
-  width: 100%;
-  transition: margin-left .5s;
+    height: 100%;
+    width: 100%;
+    transition: margin-left .5s;
 }
 
 .top-bar {
-  display: flex;
-  position: relative;
-  height: 6vh;
-  min-height: 30px;
-  background-color: rgb(109, 119, 130);
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    position: relative;
+    height: 6vh;
+    min-height: 30px;
+    background-color: rgb(109, 119, 130);
+    align-items: center;
+    justify-content: space-between;
 }
 
 .hamburger {
-  position: relative;
-  height: 2em;
-  width: 2em;
-  background: url("imgs/list.svg");
-  background-size: cover;
-  margin-left: 1.5em;
-  cursor: pointer;
+    position: relative;
+    height: 2em;
+    width: 2em;
+    background: url("imgs/list.svg");
+    background-size: cover;
+    margin-left: 1.5em;
+    cursor: pointer;
 }
 
 #site-title {
-  text-decoration: none;
-  color: white;
-  font-size: 1.5em;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  margin-right: 1.5em;
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-right: 1.5em;
 }
 
 .side-menu {
-  height: 100%;
-  width: 0;
-  /* 0 width - change this with JavaScript */
-  position: fixed;
-  /* Stay in place */
-  z-index: 1;
-  /* Stay on top */
-  top: 0;
-  left: 0;
-  background-color: rgb(52, 53, 54);
-  /* Black*/
-  overflow-x: hidden;
-  /* Disable horizontal scroll */
-  padding-top: 60px;
-  /* Place content 60px from the top */
-  transition: 0.5s;
-  /* 0.5 second transition effect to slide in the sidebar */
+    height: 100%;
+    width: 0;
+    /* 0 width - change this with JavaScript */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: rgb(52, 53, 54);
+    /* Black*/
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 60px;
+    /* Place content 60px from the top */
+    transition: 0.5s;
+    /* 0.5 second transition effect to slide in the sidebar */
 }
+
 
 /* The sidebar links */
 
 .side-menu a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #959595;
-  display: block;
-  transition: 0.3s;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #959595;
+    display: block;
+    transition: 0.3s;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 
 /* When you mouse over the navigation links, change their color */
 
 .side-menu a:hover {
-  color: #f1f1f1;
+    color: #f1f1f1;
 }
+
 
 /* Position and style the close button (top right corner) */
 
 .side-menu .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
 }
+
 
 /* The button used to open the sidebar */
 
 .hamburger:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 
 @media screen and (max-height: 450px) {
-  .side-menu {
-    padding-top: 15px;
-  }
-  .side-menu a {
-    font-size: 18px;
-  }
+    .side-menu {
+        padding-top: 15px;
+    }
+    .side-menu a {
+        font-size: 18px;
+    }
 }
 
 @media screen and (max-width: 650px) {
-  #site-title {
-    font-size: 18px;
-    text-align: end;
-  }
+    #site-title {
+        font-size: 18px;
+        text-align: end;
+    }
 }
 
 #app-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 18em);
-  justify-content: space-evenly;
-  grid-gap: 2em 1em;
-  margin: 3em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 18em);
+    justify-content: space-evenly;
+    grid-gap: 2em 1em;
+    margin: 3em;
 }
 
 .app {
-  display: flex;
-  max-height: 16em;
-  background-color: white;
-  border-radius: 0 0 0.5em 0.5em;
+    display: flex;
+    max-height: 16em;
+    background-color: white;
+    border-radius: 0 0 0.5em 0.5em;
 }
 
+
+/* 
 #demo-app {
   display: block;
-}
+} */
 
 .image-container {
-  display: flex;
-  justify-content: center;
-  position: relative;
+    display: flex;
+    justify-content: center;
+    position: relative;
 }
 
 .start-icon {
-  position: relative;
-  height: 6em;
-  width: 6em;
-  background: url("imgs/start.svg");
-  background-size: cover;
-  cursor: pointer;
+    position: relative;
+    height: 6em;
+    width: 6em;
+    background: url("imgs/start.svg");
+    background-size: cover;
+    cursor: pointer;
 }
 
 .click-start {
-  position: relative;
-  font-size: 1.5em;
-  color: rgb(49, 49, 49);
+    position: relative;
+    font-size: 1.5em;
+    color: rgb(49, 49, 49);
 }
 
 .overlay {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  opacity: 0;
-  transition: .5s ease;
-  background-color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .app:hover .overlay {
-  opacity: 1;
+    opacity: 1;
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .app a {
-  text-decoration: none;
-  width: 100%;
+    text-decoration: none;
+    width: 100%;
 }
 
 .app-image {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 100%;
-  height: 9em;
-  margin-top: 1em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    margin-top: 1em;
 }
 
 .app-title {
-  position: relative;
-  max-height: 4em;
-  overflow: hidden;
-  font-size: 1em;
-  text-align: center;
-  color: rgb(49, 49, 49);
-  margin: 0.5em;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    position: relative;
+    max-height: 4em;
+    overflow: hidden;
+    font-size: 1em;
+    text-align: center;
+    color: rgb(49, 49, 49);
+    margin: 0.5em;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .active-category {
-  background-color: rgb(75, 77, 78);
-  color: #ffffff !important;
+    background-color: rgb(75, 77, 78);
+    color: #ffffff !important;
 }
