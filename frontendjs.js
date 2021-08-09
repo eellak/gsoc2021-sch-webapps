@@ -1,5 +1,5 @@
 //const { packages } = require(".")
-var apptabs = 5;
+var columns = 8;
 var webapps = [
     path = '.',
     tabs = {
@@ -83,7 +83,7 @@ function loadCategories() {
     }
     ge('categories').innerHTML += ih.join('\n');
     console.log(ge('num').innerText)
-    ge('num').innerText = apptabs;
+    ge('num').innerText = columns;
 }
 
 function onScriptsLoaded(activeCategory) {
@@ -133,8 +133,12 @@ function newCategory(newcategory) {
 }
 
 // 0: minus, 1: plus
-function changeTabs(sign) {
-    apptabs += (-1) ** sign
-    console.log(apptabs)
-    ge('num').innerText = apptabs;
+function changeColumns(sign) {
+    columns += (-1) ** sign
+    if (columns < 0)
+        columns = 0;
+    if (columns > 10)
+        columns = 10;
+    ge('num').innerText = columns;
+    // ge('app-container').style.gridTemplateColumns = "repeat(auto-fill, " + 1 + columns + "em";
 }

@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path')
 const { spawnSync } = require('child_process');
 const readline = require('readline');
+const { inherits } = require('util');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -15,7 +16,7 @@ const rl = readline.createInterface({
 function merge_package_json() {
     let packages = [];
 
-    const folderPath = 'node_modules/@ts.sch.gr/';
+    const folderPath = 'node_modules/';
 
     fs.readdirSync(folderPath).forEach(file => {
         fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
@@ -64,7 +65,7 @@ function merge_package_json() {
 function printAllApps() {
     let packages = [];
 
-    const folderPath = 'node_modules/@ts.sch.gr/';
+    const folderPath = 'node_modules/';
 
     console.log("Βρέθηκαν οι ακόλουθες εφαρμογές:");
     fs.readdirSync(folderPath).forEach(file => {
@@ -76,9 +77,9 @@ function printAllApps() {
                 let jsondata = JSON.parse(rawdata);
 
                 let desc = jsondata.hasOwnProperty('description') &&
-                    jsondata.description[0] != "" &&
-                    jsondata.hasOwnProperty('thumbnails') &&
-                    jsondata.thumbnails[0] != "";
+                    jsondata.description != "" &&
+                    jsondata.hasOwnProperty('icon') &&
+                    jsondata.icon != "";
 
                 if (desc) {
                     // json qualifies
@@ -100,11 +101,11 @@ function display() {
 }
 
 function add(newApp) {
-    spawnSync('npm install @ts.sch.gr/' + newApp, { stdio: 'inherit', shell: true });
+    spawnSync('npm install --registry=https://ts.sch.gr/npm ' + newApp, { stdio: 'inherit', shell: true });
 }
 
 function del(oldApp) {
-    spawnSync('npm remove @ts.sch.gr/' + oldApp, { stdio: 'inherit', shell: true });
+    spawnSync('npm remove ' + oldApp, { stdio: 'inherit', shell: true });
 }
 
 function startServer() {
@@ -143,16 +144,16 @@ function menu() {
                 break;
             case '2':
                 // Προσθήκη πακέτων
-                rl.question('Πληκτρολογήστε τα πακέτα: ', (newApp) => {
-                    add(newApp);
+                rl.question('Πληκτρολογήστε τα πακέτα: ', (newApps) => {
+                    add(newApps);
                     merge_package_json();
                     menu();
                 });
                 return;
             case '3':
                 // Αφαίρεση πακέτων
-                rl.question('Πληκτρολογήστε τα πακέτα: ', (oldApp) => {
-                    del(oldApp);
+                rl.question('Πληκτρολογήστε τα πακέτα: ', (oldApps) => {
+                    del(oldApps);
                     merge_package_json();
                     menu();
                 });
@@ -170,4 +171,13 @@ function menu() {
     });
 }
 
+function init() {
+    // 1) an den yparxei package.json, ftiaxe ena mikro
+    // bl. to collection/package.json
+    // 2) an den yparxei node_modules/sch-webapps,
+    // egkatesthse to trexontas npm i --registry... sch-webapps
+    // 3) ftiaxe kai ena template index.html
+}
+
+init();
 menu();
