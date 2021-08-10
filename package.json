@@ -1,6 +1,6 @@
 {
     "bin": {
-        "sch-webapps": "index.js"
+        "sch-webapps": "sch-webapps.js"
     },
     "bugs": {
         "url": "https://gitlab.com/ts.sch.gr/sch-webapps/-/issues"
@@ -13,14 +13,10 @@
         "ts.sch.gr"
     ],
     "license": "CC-BY-SA-4.0",
-    "name": "@ts.sch.gr/sch-webapps",
+    "name": "sch-webapps",
     "repository": {
         "type": "git",
         "url": "git+https://gitlab.com/ts.sch.gr/sch-webapps.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "postinstall": "echo CALL-FUNCTION-TO-CREATE-NPMJS-ETC"
     },
     "version": "1.0.0",
     "dependencies": {}

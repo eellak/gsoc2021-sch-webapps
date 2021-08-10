@@ -1,183 +1,194 @@
-#!/usr/bin/env node
-
-const { exit } = require('process');
-const http = require('http');
-const fs = require('fs');
-const path = require('path')
-const { spawnSync } = require('child_process');
-const readline = require('readline');
-const { inherits } = require('util');
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-
-function merge_package_json() {
-    let packages = [];
-
-    const folderPath = 'node_modules/';
-
-    fs.readdirSync(folderPath).forEach(file => {
-        fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-            if (file2 == "package.json") {
-                let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
-
-                // reading each json and if it qualifies, we add it to var packages[]
-                let rawdata = fs.readFileSync(jsonPath);
-                let jsondata = JSON.parse(rawdata);
-                let keyword = false;
-                if (jsondata.hasOwnProperty('keywords')) {
-                    for (i = 0; i < jsondata.keywords.length; i++) {
-                        if (jsondata.keywords[i] == "photodentro" || jsondata.keywords[i] == "ts.sch.gr") {
-                            keyword = true;
-                            break;
-                        }
-                    }
-                }
-
-                let desc = jsondata.hasOwnProperty('description') &&
-                    jsondata.description[0] != "" &&
-                    jsondata.hasOwnProperty('icon') &&
-                    jsondata.icon[0] != "";
-
-                if (keyword && desc) {
-                    // json qualifies
-                    packages.push(jsondata);
-                    console.log("   - Στην λίστα: " + jsondata.description);
-                }
-
-            }
-        });
-
-    });
-
-    exports.packages = packages;
-    console.log("Συνολικές εφαρμογές στην λίστα: " + packages.length);
-    var superString = 'packages = [';
-    for (i = 0; i < packages.length - 1; i++) {
-        superString += JSON.stringify(packages[i]) + ', ';
+//const { packages } = require(".")
+var columns = 8;
+var webapps = [
+    path = '.',
+    tabs = {
+        // "Δημοτικό": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
+        // "Γυμνάσιο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
+        // "Λύκειο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234']
+    },
+    packages = {
+        // '8521-1234': {
+        //     "description": "πληροφορική γυμνασίου",
+        //     "name": "8521-1234"
+        // },
+        // '8521-1235': {
+        //     "description": "πληροφορική γυμνασίου",
+        //     "name": "8521-1234"
+        // }
+    },
+    packageIndex = {
+        // '8521-1234': 0,
+        // '8521-1235': 1,
     }
-    superString += JSON.stringify(packages[packages.length - 1]) + ']';
-    fs.writeFileSync('package-merged.js', superString);
+];
+
+/* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+function openNav() {
+    document.getElementById('mySidebar').style.width = '250px'
 }
 
-function printAllApps() {
-    let packages = [];
+/* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+function closeNav() {
+    document.getElementById('mySidebar').style.width = '0'
+    document.getElementById('sch-webapps').style.marginLeft = '0'
+}
 
-    const folderPath = 'node_modules/';
+function makePackages() {
+    // READ HTML: path, categories, apps
+    var txt = document.getElementById('sch-webapps').innerText.trim();
+    var txtSplit = txt.split(',');
 
-    console.log("Βρέθηκαν οι ακόλουθες εφαρμογές:");
-    fs.readdirSync(folderPath).forEach(file => {
-        fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-            if (file2 == "package.json") {
-                let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
+    webapps[0] = txtSplit[0].split(':')[1].trim();
 
-                let rawdata = fs.readFileSync(jsonPath);
-                let jsondata = JSON.parse(rawdata);
-
-                let desc = jsondata.hasOwnProperty('description') &&
-                    jsondata.description != "" &&
-                    jsondata.hasOwnProperty('icon') &&
-                    jsondata.icon != "";
-
-                if (desc) {
-                    // json qualifies
-                    console.log("   - " + path.basename(file) + ": " + jsondata.description);
-                }
+    // update "webapps" variable that holds info about each category and its corresponding apps.
+    for (i = 1; i < txtSplit.length; i++) {
+        var catName = txtSplit[i].split(':')[0].trim();
+        var catApps = txtSplit[i].split(':')[1].trim().split(' ');
+        webapps[1][catName] = catApps;
+        // make list with all apps and later keep json index of them
+        for (app in catApps) {
+            if (!webapps[3].hasOwnProperty(catApps[app])) {
+                webapps[3][catApps[app]] = '';
             }
-        });
-
-    });
-}
-
-function display() {
-    console.log(" ~~ MENU ~~ ");
-    console.log("0. Έξοδος");
-    console.log("1. Προβολή εγκατεστημένων πακέτων");
-    console.log("2. Προσθήκη πακέτων");
-    console.log("3. Αφαίρεση πακέτων");
-    console.log("4. Εκκίνηση web server");
-}
-
-function add(newApp) {
-    spawnSync('npm install --registry=https://ts.sch.gr/npm ' + newApp, { stdio: 'inherit', shell: true });
-}
-
-function del(oldApp) {
-    spawnSync('npm remove ' + oldApp, { stdio: 'inherit', shell: true });
-}
-
-function startServer() {
-    const PORT = 3000;
-
-    const folderPath = 'index.html';
-
-    var index = fs.readFileSync(folderPath);
-    console.log(index);
-
-    http.createServer(function(request, response) {
-        console.log('lalala: ' + request.url);
-        response.writeHeader(200, { "Content-Type": "text/html" });
-        var readStream = fs.createReadStream(folderPath, 'utf8');
-        readStream.pipe(res);
-        // response.write(index);
-        // response.end();
-    }).listen(PORT, '127.0.0.1');
-
-
-}
-
-function menu() {
-    display()
-
-    rl.question(`Πληκτρολόγησε 0-4 `, (choice) => {
-
-        switch (choice) {
-            case '0':
-                // Έξοδος
-                exit();
-                break;
-            case '1':
-                // Προβολή εγκατεστημένων πακέτων
-                printAllApps();
-                break;
-            case '2':
-                // Προσθήκη πακέτων
-                rl.question('Πληκτρολογήστε τα πακέτα: ', (newApps) => {
-                    add(newApps);
-                    merge_package_json();
-                    menu();
-                });
-                return;
-            case '3':
-                // Αφαίρεση πακέτων
-                rl.question('Πληκτρολογήστε τα πακέτα: ', (oldApps) => {
-                    del(oldApps);
-                    merge_package_json();
-                    menu();
-                });
-                return;
-            case '4':
-                // Εκκίνηση web server
-                console.log("Not working yet!");
-                //startServer();
-                break;
-            default:
-                // Λάθος είσοδος
-                console.log("Λάθος λειτουργία, πληκτρολογήστε έναν αριθμό από 0-4.")
         }
-        menu();
+
+    }
+    loadCategories();
+
+    // package.JS APP READ -> webapps.packages var update
+    for (app in webapps[3]) {
+        var script = document.createElement('script');
+        script.src = sformat(webapps[0] + '{}/package.js', app);
+        script.name = app;
+        document.body.appendChild(script);
+        script.onload = function () {
+            webapps[2][this.name] = package;
+            // After all scripts are loaded, load all apps to html (active category == "all")
+            if (Object.keys(webapps[3]).length == Object.keys(webapps[2]).length) {
+                onScriptsLoaded("Όλα");
+            }
+        };
+    }
+}
+
+function ge(element) {
+    return document.getElementById(element);
+}
+
+function loadCategories() {
+    const ih = [];
+    for (cat in webapps[1]) {
+        ih.push(sformat('<a href="#" onclick="newCategory(this)">{}</a>', cat));
+    }
+    ge('categories').innerHTML += ih.join('\n');
+    console.log(ge('num').innerText)
+    ge('num').innerText = columns;
+}
+
+function onScriptsLoaded(activeCategory) {
+    const ih = [];
+    var collection;
+
+    if (activeCategory == "Όλα") {
+        collection = Object.keys(webapps[2]);
+    } else {
+        collection = webapps[1][activeCategory];
+    }
+    //console.log(collection)
+    for (const app of collection) {
+        //console.log(app)
+        //console.log(webapps[2]);
+        ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Click to start</div></div><img class="app-image" src="{}/package.png"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].description));
+    }
+    //><div class="app-image"><img src="{}/package.png"></div>
+    ge('app-container').innerHTML = ih.join('\n');
+}
+
+// ES6 string templates don't work in old Android WebView
+function sformat(format) {
+    const args = arguments;
+    var i = 0;
+    return format.replace(/{(\d*)}/g, function sformatReplace(match, number) {
+        i += 1;
+        if (typeof args[number] !== 'undefined') {
+            return args[number];
+        }
+        if (typeof args[i] !== 'undefined') {
+            return args[i];
+        }
+        return match;
     });
+}
+
+function newCategory(newcategory) {
+    // change side menu active category
+    document.querySelector('.active-category').classList.remove('active-category')
+    newcategory.classList.add('active-category')
+    console.log(document.querySelector('.active-category').innerHTML)
+
+    // clean apps and load new ones
+    document.getElementById('app-container').innerHTML = ''
+    onScriptsLoaded(newcategory.innerHTML);
+}
+
+// 0: minus, 1: plus
+function changeColumns(sign) {
+    columns += (-1) ** sign
+    if (columns < 0)
+        columns = 0;
+    if (columns > 10)
+        columns = 10;
+    ge('num').innerText = columns;
+    // ge('app-container').style.gridTemplateColumns = "repeat(auto-fill, " + 1 + columns + "em";
 }
 
 function init() {
-    // 1) an den yparxei package.json, ftiaxe ena mikro
-    // bl. to collection/package.json
-    // 2) an den yparxei node_modules/sch-webapps,
-    // egkatesthse to trexontas npm i --registry... sch-webapps
-    // 3) ftiaxe kai ena template index.html
+    var cssId = 'styles';
+    var head = document.getElementsByTagName('head')[0];
+    var link = document.createElement('link');
+    link.id = cssId;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = 'style.css'; ///node_modules/sch-webapps/
+    link.media = 'all';
+    head.appendChild(link);
+
+    if (window.addEventListener) {
+        window.addEventListener('load', makeHtml)
+        window.addEventListener('load', makePackages)
+    } else {
+        window.attachEvent('onload', makeHtml)
+        window.attachEvent('onload', makePackages)
+    }
+}
+
+function makeHtml() {
+    var col = ge('sch-webapps').innerHTML;
+    ge('sch-webapps').innerHTML = `
+        <div class="top-bar">
+            <div class="hamburger" onclick="openNav()"></div>
+            <a href="index.html" id="site-title">Εκκινητής εκπαιδευτικών ιστοεφαρμογών</a>
+        </div>
+        <div id="mySidebar" class="side-menu">
+            <div id="categories">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#" onclick="newCategory(this)" class="active-category">Όλα</a>
+            </div>
+
+            <div id="options">
+                Στήλες
+                <div>
+                    <div id="minus" onclick="changeColumns(1)"></div>
+                    <div id="num">num</div>
+                    <div id="plus" onclick="changeColumns(2)"></div>
+                </div>
+            </div>
+        </div>
+        <div id="app-container">
+        </div>`;
+
+    ge('app-container').innerHTML = col;
 }
 
 init();
-menu();

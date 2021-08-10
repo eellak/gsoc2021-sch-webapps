@@ -88,7 +88,7 @@ function makeFiles(result) {
 
   // get json template
   var appDir = path.dirname(require.main.filename);
-  var rawdata = fs.readFileSync(appDir + '/app-template.json');
+  var rawdata = fs.readFileSync(appDir + '/import-package.json');
   var jsonTemplate = JSON.parse(rawdata);
 
   jsonTemplate.description = title;
