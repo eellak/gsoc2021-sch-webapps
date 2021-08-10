@@ -138,4 +138,9 @@ function xmlurl(sid) {
 }
 
 // parse xml
-download(xmlurl(process.argv[2]), onXMLDownloaded);
+var args = process.argv.slice(2);
+for (i = 0; i < args.length; i++) {
+  console.log(args[i]);
+  download(xmlurl(args[i]), onXMLDownloaded);
+}
+

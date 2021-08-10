@@ -11,6 +11,8 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
+const { networkInterfaces } = require('os');
+const { join } = require('path');
 
 function writeFileIfNotExists(fname, contents, options, callback) {
     if (typeof options === 'function') {
@@ -118,11 +120,11 @@ function printAllApps() {
 }
 
 function display() {
-    console.log(" ~~ MENU ~~ ");
+    console.log(" ~~ ΜΕΝΟΥ ΕΠΙΛΟΓΩΝ ~~ ");
     console.log("0. Έξοδος");
-    console.log("1. Προβολή εγκατεστημένων πακέτων");
-    console.log("2. Προσθήκη πακέτων");
-    console.log("3. Αφαίρεση πακέτων");
+    console.log("1. Προβολή εγκατεστημένων ιστοεφαρμογών");
+    console.log("2. Εγκατάσταση ιστοεφαρμογών");
+    console.log("3. Απεγκατάσταση ιστοεφαρμογών");
     console.log("4. Εκκίνηση web server");
 }
 
@@ -134,8 +136,22 @@ function del(oldApp) {
     spawnSync('npm remove ' + oldApp, { stdio: 'inherit', shell: true });
 }
 
+function getIP() {
+    const nets = networkInterfaces();
+
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+            if (net.family === 'IPv4' && !net.internal) {
+                return net.address;
+            }
+        }
+    }
+    return "0.0.0.0";
+}
+
 function startServer() {
-    var dir = path.join(__dirname);
+    var dir = __dirname;
 
     var mime = {
         html: 'text/html',
@@ -173,16 +189,16 @@ function startServer() {
             res.end('Not found');
         });
     });
-
     server.listen(3000, function () {
-        console.log('Listening on http://localhost:3000/');
+        console.log('Διεύθυνση σύνδεσης στη συλλογή http://' + getIP() + ':3000/');
+        console.log('Πατήστε Ctrl+C για τέλος');
     });
 }
 
 function menu() {
     display()
 
-    rl.question(`Πληκτρολόγησε 0-4 `, (choice) => {
+    rl.question(`Πληκτρολόγησε την επιλογή σου (0-4): `, (choice) => {
 
         switch (choice) {
             case '0':
@@ -221,24 +237,51 @@ function menu() {
     });
 }
 
+function parseArgs(args) {
+    switch (args[0]) {
+        case 'ls':
+            printAllApps();
+            break;
+        case 'install':
+        case 'i':
+            add(args.slice(1).join(' '));
+            break;
+        case 'remove':
+        case 'rm':
+            del(args.slice(1).join(' '));
+            break;
+        case 'webserver':
+            startServer();
+            break;
+        case 'index':
+            merge_package_json();
+            break;
+        case 'import':
+            spawnSync('nodejs import.js ' + args.slice(1).join(' '), { stdio: 'inherit', shell: true });
+            break;
+        case 'publish':
+            spawnSync('npm publish --registry=https://ts.sch.gr/npm', { stdio: 'inherit', shell: true });
+            break;
+        default:
+            console.log('Λάθος εντολή');
+    }
+}
+
 function init() {
     // 1) an den yparxei package.json, ftiaxe ena mikro
     var json = `{
                     "description": "Ιδιωτική συλλογή",
                     "license": "CC-BY-SA-4.0",
-                    "scripts": {
-                        "merge": "echo HERE; npm config set registry=https://gitlab.com/api/v4/packages/npm/ ; npm get registry"
-                    },
                     "version": "1.0.0"
                 } `;
-    writeFileIfNotExists('ppppackage.json', json + '\n');
+    writeFileIfNotExists('package.json', json + '\n');
 
     // bl. to collection/package.json
     // 2) an den yparxei node_modules/sch-webapps,
     // egkatesthse to trexontas npm i --registry... sch-webapps
     try {
         if (!fs.existsSync("node_modules/sch-webapps")) {
-            spawnSync('npm install ', { stdio: 'inherit', shell: true });
+            spawnSync('npm install sch-webapps', { stdio: 'inherit', shell: true });
         }
     } catch (err) {
         console.error(err)
@@ -248,8 +291,13 @@ function init() {
     //     if (err) throw err;
     //     console.log('success');
     // });
-    menu();
+
+    var args = process.argv.slice(2);
+    console.log(args);
+    if (args.length > 0) {
+        parseArgs(args);
+    } else
+        menu();
 }
 
 init();
-//menu();
