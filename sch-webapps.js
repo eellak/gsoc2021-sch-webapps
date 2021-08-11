@@ -61,7 +61,7 @@ function merge_package_json() {
 
   });
 
-  exports.packages = packages;
+  //exports.packages = packages;
   console.log("Συνολικές εφαρμογές στην λίστα: " + packages.length);
   var superString = 'packages = [';
   for (i = 0; i < packages.length - 1; i++) {
@@ -132,7 +132,7 @@ function getIP() {
 }
 
 function startServer() {
-  var dir = __dirname;
+  var dir = process.cwd() ;
 
   var mime = {
     html: 'text/html',
@@ -153,6 +153,7 @@ function startServer() {
       return res.end('Method not implemented');
     }
     var file = path.join(dir, reqpath.replace(/\/$/, '/index.html'));
+    console.log(file);
     if (file.indexOf(dir + path.sep) !== 0) {
       res.statusCode = 403;
       res.setHeader('Content-Type', 'text/plain');
@@ -271,10 +272,10 @@ function init() {
   } catch (err) {
   }
   // 3) ftiaxe kai ena template index.html
-  // fs.copyFile('node_modules/sch-webapps/index.html', 'index.html', (err) => {
-  //     if (err) throw err;
-  //     console.log('success');
-  // });
+  fs.copyFile('node_modules/sch-webapps/index.html', 'index.html', (err) => {
+    if (err) throw err;
+    console.log('success');
+  });
 
   var args = process.argv.slice(2);
   if (args.length > 0) {

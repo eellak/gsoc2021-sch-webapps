@@ -1,4 +1,4 @@
-//const { packages } = require(".")
+
 var columns = 8;
 var webapps = [
     path = '.',
@@ -7,7 +7,7 @@ var webapps = [
         // "Γυμνάσιο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
         // "Λύκειο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234']
     },
-    packages = {
+    pckgs = {
         // '8521-1234': {
         //     "description": "πληροφορική γυμνασίου",
         //     "name": "8521-1234"
@@ -36,24 +36,39 @@ function closeNav() {
 
 function makePackages() {
     // READ HTML: path, categories, apps
-    var txt = document.getElementById('sch-webapps').innerText.trim();
-    var txtSplit = txt.split(',');
+    var txt = document.getElementById('app-container').innerText.trim();
+    webapps[0] = 'node_modules/';
+    if (txt != '') {
+        var txtSplit = txt.split(',');
 
-    webapps[0] = txtSplit[0].split(':')[1].trim();
+        var path = txtSplit[0].split(':')[1].trim();
+        if (path != '')
+            webapps[0] = path; 
 
-    // update "webapps" variable that holds info about each category and its corresponding apps.
-    for (i = 1; i < txtSplit.length; i++) {
-        var catName = txtSplit[i].split(':')[0].trim();
-        var catApps = txtSplit[i].split(':')[1].trim().split(' ');
-        webapps[1][catName] = catApps;
-        // make list with all apps and later keep json index of them
-        for (app in catApps) {
-            if (!webapps[3].hasOwnProperty(catApps[app])) {
-                webapps[3][catApps[app]] = '';
+        // update "webapps" variable that holds info about each category and its corresponding apps.
+        for (i = 1; i < txtSplit.length; i++) {
+            var catName = txtSplit[i].split(':')[0].trim();
+            var catApps = txtSplit[i].split(':')[1].trim().split(' ');
+            webapps[1][catName] = catApps;
+            // make list with all apps and later keep json index of them
+            for (app in catApps) {
+                if (!webapps[3].hasOwnProperty(catApps[app])) {
+                    webapps[3][catApps[app]] = '';
+                }
             }
         }
-
     }
+    console.log(webapps[2]);
+
+    // now check for other apps in package-merged to add on the list
+    if (packages != undefined) {
+        for (app of packages) {
+            if (!webapps[3].hasOwnProperty(app.name)) {
+                webapps[3][app.name] = '';
+            }
+        }
+    }
+
     loadCategories();
 
     // package.JS APP READ -> webapps.packages var update
@@ -150,16 +165,16 @@ function init() {
     link.id = cssId;
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = 'style.css'; ///node_modules/sch-webapps/
+    link.href = 'node_modules/sch-webapps/style.css';
     link.media = 'all';
     head.appendChild(link);
 
     if (window.addEventListener) {
         window.addEventListener('load', makeHtml)
-        window.addEventListener('load', makePackages)
+        //window.addEventListener('load', makePackages)
     } else {
         window.attachEvent('onload', makeHtml)
-        window.attachEvent('onload', makePackages)
+        //window.attachEvent('onload', makePackages)
     }
 }
 
@@ -189,6 +204,33 @@ function makeHtml() {
         </div>`;
 
     ge('app-container').innerHTML = col;
+    makePackages();
 }
 
 init();
+
+
+// var webapps = {
+//     path: '.',
+//     tabs: {
+//         // "Δημοτικό": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
+//         // "Γυμνάσιο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
+//         // "Λύκειο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234']
+//     },
+//     pckgs: {
+//         // '8521-1234': {
+//         //     "description": "πληροφορική γυμνασίου",
+//         //     "name": "8521-1234"
+//         // },
+//         // '8521-1235': {
+//         //     "description": "πληροφορική γυμνασίου",
+//         //     "name": "8521-1234"
+//         // }
+//     },
+//     packageIndex: {
+//         // '8521-1234': 0,
+//         // '8521-1235': 1,
+//     }
+// };
+
+/// TODO kane map to object dict webapps[2]
