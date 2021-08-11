@@ -6,6 +6,8 @@ var fs = require('fs');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 
+var app = {};
+
 function download(url, callback) {
   var data = [];
   http.get(url, function (res) {
@@ -30,13 +32,18 @@ function writeFileIfNotExists(fname, contents, options, callback) {
   // force wx flag so file will be created only if it does not already exist
   options.flag = 'wx';
   fs.writeFile(fname, contents, options, function (err) {
-    var existed = false;
-    if (err && err.code === 'EEXIST') {
-      // This just means the file already existed.
-      // We will not treat that as an error, so kill the error code
-      err = null;
-      existed = true;
-      console.log('Not overwriting existing file:', fname);
+    if (err) {
+      if (err.code === 'EEXIST') {
+        // This just means the file already existed.
+        // We will not treat that as an error, so kill the error code
+        err = null;
+        console.log('Not overwriting existing file:', fname);
+      }
+      else {
+        // E.g. permission errors
+        console.log('Error while writing file:', fname);
+        throw err;
+      }
     }
     else {
       console.log('Created file:', fname);
@@ -49,98 +56,109 @@ function writeFileIfNotExists(fname, contents, options, callback) {
 
 parser.on('error', function (err) { console.log('Parser error', err); });
 
+function onHTMLDownloaded(data) {
+  app.html = data.toString();
+  download(app.urls.xml, onXMLDownloaded);
+}
+
 function onXMLDownloaded(data) {
-  parser.parseString(data, function (err, result) {
-    makeFiles(result);
+  parser.parseString(data, function (err, xml) {
+    app.xml = xml;
+    processApp();
   });
 }
 
-// TODO: the next image isn't always available; verify it manually
-function nextImage(image) {
-  var splitted = image.split('/');
-  splitted[5] = parseInt(splitted[5]) + 1;
-  return splitted.join('/');
-}
+function processApp() {
+  var lom0 = app.xml['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0];
 
-function makeFiles(result) {
-  var packageName = // 10761
-    JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].header[0].identifier[0]).split('/')[1].split('"')[0];
+  app.description = // 'Δραστηριότητα πρακτικής και εξάσκησης με στόχο ...'
+    JSON.stringify(lom0.general[0].description[0].string[0]['_']).replace(/"/g, '').replace(/\\r/g, '').replace(/\\n/g, '\n');
 
-  var otherNumber = // 8521
-    JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].header[0].identifier[0]).split('/')[0].split('lor:')[1];
+  app.title = // Αναγνώριση και αναπαραγωγή μοτίβου
+    JSON.stringify(lom0.general[0].title[0].string[0]['_']).replace(/"/g, '');
 
-  var description = // 'Δραστηριότητα πρακτικής και εξάσκησης με στόχο ...'
-    JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].general[0].description[0].string[0]['_']).replace(/"/g, '').replace(/\\r/g, '').replace(/\\n/g, '\n');
+  // Some apps have only a small icon, some additionally have a big icon
+  // The big icon doesn't appear in the xml; scrape the html page for it
+  // To get it from the XML, we'd do:
+  // app.icon = JSON.stringify(lom0.relation[1].resource[0].identifier[0].entry[0]).replace(/"/g, '');
 
-  var title = // Αναγνώριση και αναπαραγωγή μοτίβου
-    JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].general[0].title[0].string[0]['_']).replace(/"/g, '');
+  app.icon = 'http://photodentro.edu.gr' + app.html.match(/<img src="([^"]*)" alt="Εικονίδιο"/)[1]
 
-  var image = nextImage(JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].relation[1].resource[0].identifier[0].entry[0]).replace(/"/g, ''));
-
-  var keywords = [];
-  var kwPath = result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].general[0].keyword;
+  app.keywords = [];
+  var kwPath = lom0.general[0].keyword;
   for (var kw in kwPath) {
-    keywords.push(JSON.stringify(kwPath[kw].string[0]['_']).replace(/"/g, ''));
+    app.keywords.push(JSON.stringify(kwPath[kw].string[0]['_']).replace(/"/g, ''));
   }
 
-  var homepage = 'http://photodentro.edu.gr/lor/r/' + otherNumber + '/' + packageName;
-  var downloadLink = JSON.stringify(result['OAI-PMH'].GetRecord[0].record[0].metadata[0].lom[0].technical[0].location['0']).replace(/"/g, '');
+  app.downloadLink = JSON.stringify(lom0.technical[0].location['0']).replace(/"/g, '');
 
   // get json template
-  var appDir = path.dirname(require.main.filename);
-  var rawdata = fs.readFileSync(appDir + '/import-package.json');
+  var rawdata = fs.readFileSync(path.join(__dirname, 'import-package.json'));
   var jsonTemplate = JSON.parse(rawdata);
 
-  jsonTemplate.description = title;
-  jsonTemplate.descriptionLong = description;
-  jsonTemplate.homepage = homepage;
-  jsonTemplate.name = otherNumber + '-' + packageName;
-  jsonTemplate.keywords = keywords;
-  jsonTemplate.repository = downloadLink;
+  jsonTemplate.description = app.title;
+  jsonTemplate.descriptionLong = app.description;
+  jsonTemplate.homepage = app.urls.shownat;
+  jsonTemplate.name = app.id[0] + '-' + app.id[1];
+  jsonTemplate.keywords = app.keywords;
+  jsonTemplate.repository = app.downloadLink;
 
   // All these can run asynchronously, no need to chain them with callbacks
 
   writeFileIfNotExists('package.json', JSON.stringify(jsonTemplate, null, 4) + '\n');
   writeFileIfNotExists('package.js', 'package =\n' + JSON.stringify(jsonTemplate, null, 4) + '\n');
 
-  // MAKE README
+  // Create README.md
   var readme =
-    '[![Μικρογραφία](' + image + ')](' + homepage + ')'
-    + '\n\n**ΤΙΤΛΟΣ:** ' + title
-    + '\n\n**ΔΙΕΥΘΥΝΣΗ ΑΝΑΦΟΡΑΣ:** ' + homepage
-    + '\n\n**ΔΙΕΥΘΥΝΣΗ ΦΥΣΙΚΟΥ ΠΟΡΟΥ:** http://photodentro.edu.gr/v/item/ds/' + otherNumber + '/' + packageName
-    + '\n\n**ΔΙΕΥΘΥΝΣΗ ΛΗΨΗΣ:** ' + downloadLink
-    + '\n\n**ΛΕΞΕΙΣ ΚΛΕΙΔΙΑ:** ' + keywords.join(', ')
-    + '\n\n**ΠΕΡΙΓΡΑΦΗ:** ' + description + '\n';
+    '[![Εικονίδιο](' + app.icon + ')](' + app.urls.shownat + ')'
+    + '\n\n**ΤΙΤΛΟΣ:** ' + app.title
+    + '\n\n**ΔΙΕΥΘΥΝΣΗ ΑΝΑΦΟΡΑΣ:** ' + app.urls.shownat
+    + '\n\n**ΔΙΕΥΘΥΝΣΗ ΦΥΣΙΚΟΥ ΠΟΡΟΥ:** ' + app.urls.preview
+    + '\n\n**ΔΙΕΥΘΥΝΣΗ ΛΗΨΗΣ:** ' + app.downloadLink
+    + '\n\n**ΛΕΞΕΙΣ ΚΛΕΙΔΙΑ:** ' + app.keywords.join(', ')
+    + '\n\n**ΠΕΡΙΓΡΑΦΗ:** ' + app.description + '\n';
 
   writeFileIfNotExists('README.md', readme);
 
-  // DOWNLOAD IMAGE
-  download(image, function (data) {
-    writeFileIfNotExists('package.png', data);
+  download(app.icon, function (data) {
+    writeFileIfNotExists('package.jpg', data);
   });
 }
 
-function xmlurl(sid) {
-  // Convert string id to an array id
-  var aid = sid.replace('-', '/').split('/');
-  var url = ''
-  switch (aid[0]) {
-    case '8521': url = 'http://photodentro.edu.gr/oai-lor/request?verb=GetRecord&identifier=oai:photodentro:lor:{1}/{2}&metadataPrefix=oai_lom'; break;
-    case '8531': url = 'http://photodentro.edu.gr/oai-edusoft/request?verb=GetRecord&identifier=oai:photodentro:edusoft:{1}/{2}&metadataPrefix=oai_lom'; break;
-    case '8522': url = 'http://photodentro.edu.gr/oai-video/request?verb=GetRecord&identifier=oai:photodentro:educationalvideo:{1}/{2}&metadataPrefix=oai_lom'; break;
-    case '8525': url = 'http://photodentro.edu.gr/oai-ugc/request?verb=GetRecord&identifier=oai:photodentro:ugc:{1}/{2}&metadataPrefix=oai_lom'; break;
-    default: throw new Error('Wrong parameter');
+function urls(id) {
+  var result = {};
+  // Check possible types at http://photodentro.edu.gr/aggregator/
+  switch (id[0]) {
+    case '8521':
+      result.xml = 'http://photodentro.edu.gr/oai-lor/request?verb=GetRecord&identifier=oai:photodentro:lor:{1}/{2}&metadataPrefix=oai_lom';
+      result.shownat = 'http://photodentro.edu.gr/lor/r/{1}/{2}';
+      result.preview = 'http://photodentro.edu.gr/v/item/ds/{1}/{2}';
+      break;
+    case '8522':
+      result.xml = 'http://photodentro.edu.gr/oai-video/request?verb=GetRecord&identifier=oai:photodentro:educationalvideo:{1}/{2}&metadataPrefix=oai_lom';
+      result.shownat = 'http://photodentro.edu.gr/video/r/{1}/{2}';
+      result.preview = 'http://photodentro.edu.gr/v/item/video/{1}/{2}';
+      break;
+    case '8525':
+      result.xml = 'http://photodentro.edu.gr/oai-ugc/request?verb=GetRecord&identifier=oai:photodentro:ugc:{1}/{2}&metadataPrefix=oai_lom';
+      result.shownat = 'http://photodentro.edu.gr/ugc/r/{1}/{2}';
+      result.preview = 'http://photodentro.edu.gr/v/item/ugc/{1}/{2}';
+      break;
+    case '8531':
+      result.xml = 'http://photodentro.edu.gr/oai-edusoft/request?verb=GetRecord&identifier=oai:photodentro:edusoft:{1}/{2}&metadataPrefix=oai_lom';
+      result.shownat = 'http://photodentro.edu.gr/edusoft/r/{1}/{2}';
+      result.preview = 'http://photodentro.edu.gr/v/item/edusoft/{1}/{2}';
+      break;
+    default: throw new Error('Invalid app id: ' + app.id);
   }
-  url = url.replace('{1}', aid[0]).replace('{2}', aid[1])
-  console.log('XML package info at:', url);
-  return url;
+  result.xml = result.xml.replace('{1}', id[0]).replace('{2}', id[1])
+  result.shownat = result.shownat.replace('{1}', id[0]).replace('{2}', id[1])
+  result.preview = result.preview.replace('{1}', id[0]).replace('{2}', id[1])
+
+  return result;
 }
 
-// parse xml
-var args = process.argv.slice(2);
-for (i = 0; i < args.length; i++) {
-  console.log(args[i]);
-  download(xmlurl(args[i]), onXMLDownloaded);
-}
-
+// Convert string 'id0-id1' to an array ['id0', 'id1']
+app.id = process.argv[2].replace('-', '/').split('/');
+app.urls = urls(app.id);
+download(app.urls.shownat, onHTMLDownloaded);
