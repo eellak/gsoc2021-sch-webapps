@@ -49,7 +49,7 @@ function writeFileIfNotExists(fname, contents, options, callback) {
       console.log('Created file:', fname);
     }
     if (typeof callback === 'function') {
-      callback(err, existed);
+      callback(err);
     }
   });
 }

@@ -6,13 +6,11 @@ const fs = require('fs');
 const path = require('path')
 const { spawnSync } = require('child_process');
 const readline = require('readline');
-const { inherits } = require('util');
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 const { networkInterfaces } = require('os');
-const { join } = require('path');
 
 function writeFileIfNotExists(name, data) {
   if (!fs.existsSync(name)) {
@@ -24,13 +22,14 @@ function writeFileIfNotExists(name, data) {
 
 function merge_package_json() {
   let packages = [];
+  let i;
 
   const folderPath = 'node_modules/';
 
   fs.readdirSync(folderPath).forEach(file => {
     fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-      if (file2 == "package.json") {
-        let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
+      if (file2 == 'package.json') {
+        let jsonPath = folderPath + path.basename(file) + '/' + path.basename(file2);
 
         // reading each json and if it qualifies, we add it to var packages[]
         let rawdata = fs.readFileSync(jsonPath);
@@ -38,7 +37,7 @@ function merge_package_json() {
         let keyword = false;
         if (jsondata.hasOwnProperty('keywords')) {
           // for (i = 0; i < jsondata.keywords.length; i++) {
-          //   if (jsondata.keywords[i] == "photodentro" || jsondata.keywords[i] == "ts.sch.gr") {
+          //   if (jsondata.keywords[i] == 'photodentro' || jsondata.keywords[i] == 'ts.sch.gr') {
           keyword = true;
           //     break;
           //   }
@@ -46,23 +45,21 @@ function merge_package_json() {
         }
 
         let desc = jsondata.hasOwnProperty('description') &&
-          jsondata.description[0] != "" &&
+          jsondata.description[0] != '' &&
           jsondata.hasOwnProperty('icon') &&
-          jsondata.icon[0] != "";
+          jsondata.icon[0] != '';
 
         if (keyword && desc) {
           // json qualifies
           packages.push(jsondata);
-          console.log("   - Στην λίστα: " + jsondata.description);
+          console.log('   - Στη λίστα: ' + jsondata.description);
         }
-
       }
     });
-
   });
 
   //exports.packages = packages;
-  console.log("Συνολικές εφαρμογές στην λίστα: " + packages.length);
+  console.log('Συνολικές εφαρμογές στη λίστα: ' + packages.length);
   var superString = 'packages = [';
   for (i = 0; i < packages.length - 1; i++) {
     superString += JSON.stringify(packages[i]) + ', ';
@@ -76,23 +73,23 @@ function printAllApps() {
 
   const folderPath = 'node_modules/';
 
-  console.log("Βρέθηκαν οι ακόλουθες εφαρμογές:");
+  console.log('Βρέθηκαν οι ακόλουθες ιστοεφαρμογές:');
   fs.readdirSync(folderPath).forEach(file => {
     fs.readdirSync(folderPath + path.basename(file)).forEach(file2 => {
-      if (file2 == "package.json") {
-        let jsonPath = folderPath + path.basename(file) + "/" + path.basename(file2);
+      if (file2 == 'package.json') {
+        let jsonPath = folderPath + path.basename(file) + '/' + path.basename(file2);
 
         let rawdata = fs.readFileSync(jsonPath);
         let jsondata = JSON.parse(rawdata);
 
         let desc = jsondata.hasOwnProperty('description') &&
-          jsondata.description != "" &&
+          jsondata.description != '' &&
           jsondata.hasOwnProperty('icon') &&
-          jsondata.icon != "";
+          jsondata.icon != '';
 
         if (desc) {
           // json qualifies
-          console.log("   - " + path.basename(file) + ": " + jsondata.description);
+          console.log('   - ' + path.basename(file) + ': ' + jsondata.description);
         }
       }
     });
@@ -101,12 +98,12 @@ function printAllApps() {
 }
 
 function display() {
-  console.log(" ~~ ΜΕΝΟΥ ΕΠΙΛΟΓΩΝ ~~ ");
-  console.log("0. Έξοδος");
-  console.log("1. Προβολή εγκατεστημένων ιστοεφαρμογών");
-  console.log("2. Εγκατάσταση ιστοεφαρμογών");
-  console.log("3. Απεγκατάσταση ιστοεφαρμογών");
-  console.log("4. Εκκίνηση web server");
+  console.log(' ~~ ΜΕΝΟΥ ΕΠΙΛΟΓΩΝ ~~ ');
+  console.log('0. Έξοδος');
+  console.log('1. Προβολή εγκατεστημένων ιστοεφαρμογών');
+  console.log('2. Εγκατάσταση ιστοεφαρμογών');
+  console.log('3. Απεγκατάσταση ιστοεφαρμογών');
+  console.log('4. Εκκίνηση web server');
 }
 
 function add(newApp) {
@@ -128,11 +125,11 @@ function getIP() {
       }
     }
   }
-  return "0.0.0.0";
+  return '0.0.0.0';
 }
 
 function startServer() {
-  var dir = process.cwd() ;
+  var dir = process.cwd();
 
   var mime = {
     html: 'text/html',
@@ -180,7 +177,7 @@ function startServer() {
 function menu() {
   display()
 
-  rl.question(`Πληκτρολόγησε την επιλογή σου (0-4): `, (choice) => {
+  rl.question('Πληκτρολόγησε την επιλογή σου (0-4): ', (choice) => {
 
     switch (choice) {
       case '0':
@@ -213,7 +210,7 @@ function menu() {
         return;
       default:
         // Λάθος είσοδος
-        console.log("Λάθος λειτουργία, πληκτρολογήστε έναν αριθμό από 0-4.")
+        console.log('Λάθος λειτουργία, πληκτρολογήστε έναν αριθμό από 0-4.')
     }
     menu();
   });
@@ -264,12 +261,8 @@ function init() {
 }
 `);
 
-  try {
-    let exists = fs.existsSync("node_modules/sch-webapps");
-    if (!exists) {
-      spawnSync('npm install sch-webapps', { stdio: 'inherit', shell: true });
-    }
-  } catch (err) {
+  if (!fs.existsSync('node_modules/sch-webapps')) {
+    spawnSync('npm install --registry=https://ts.sch.gr/npm/ sch-webapps', { stdio: 'inherit', shell: true });
   }
   // 3) ftiaxe kai ena template index.html
   fs.copyFile('node_modules/sch-webapps/index.html', 'index.html', (err) => {
