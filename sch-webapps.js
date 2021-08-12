@@ -177,7 +177,7 @@ function startServer() {
 function menu() {
   display()
 
-  rl.question('Πληκτρολόγησε την επιλογή σου (0-4): ', (choice) => {
+  rl.question('Πληκτρoλογήστε την επιλογή σας (0-4): ', (choice) => {
 
     switch (choice) {
       case '0':
@@ -190,7 +190,7 @@ function menu() {
         break;
       case '2':
         // Προσθήκη πακέτων
-        rl.question('Πληκτρολογήστε τα πακέτα: ', (newApps) => {
+        rl.question('Πληκτρολογήστε τα αναγνωριστικά των ιστοεφαρμογών: ', (newApps) => {
           add(newApps);
           merge_package_json();
           menu();
@@ -198,7 +198,7 @@ function menu() {
         return;
       case '3':
         // Αφαίρεση πακέτων
-        rl.question('Πληκτρολογήστε τα πακέτα: ', (oldApps) => {
+        rl.question('Πληκτρολογήστε τα αναγνωριστικά των ιστοεφαρμογών: ', (oldApps) => {
           del(oldApps);
           merge_package_json();
           menu();
@@ -221,12 +221,13 @@ function parseArgs(args) {
     case 'ls':
       printAllApps();
       break;
-    case 'install':
     case 'i':
+    case 'install':
       add(args.slice(1).join(' '));
       break;
     case 'remove':
     case 'rm':
+    case 'uninstall':
       del(args.slice(1).join(' '));
       break;
     case 'webserver':
