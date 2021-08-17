@@ -60,11 +60,12 @@ function merge_package_json() {
 
   //exports.packages = packages;
   console.log('Συνολικές εφαρμογές στη λίστα: ' + packages.length);
-  var superString = 'packages = [';
+  var superString = '';
   for (i = 0; i < packages.length - 1; i++) {
     superString += JSON.stringify(packages[i]) + ', ';
   }
-  superString += JSON.stringify(packages[packages.length - 1]) + ']';
+  superString += JSON.stringify(packages[packages.length - 1]);
+  superString = 'packages = [' + JSON.stringify(superString, null, 4) + ']';
   fs.writeFileSync('package-merged.js', superString);
 }
 
