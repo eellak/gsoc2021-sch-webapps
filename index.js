@@ -82,9 +82,6 @@ function makePackages() {
     script.onload = function () {
       webapps[2][this.name] = package;
       // After all scripts are loaded, load all apps to html (active category == "all")
-      //console.log(Object.keys(webapps[3]).length + " " + Object.keys(webapps[2]).length);
-      //console.log(webapps[3])
-      //console.log(webapps[2])
       if (Object.keys(webapps[3]).length == Object.keys(webapps[2]).length) {
         onScriptsLoaded('Όλα');
       }
@@ -102,7 +99,6 @@ function loadCategories() {
     ih.push(sformat('<a href="#" onclick="newCategory(this)">{}</a>', cat));
   }
   ge('categories').innerHTML += ih.join('\n');
-  console.log(ge('num').innerText)
   ge('num').innerText = columnSize;
 }
 
@@ -142,7 +138,6 @@ function newCategory(newcategory) {
   // change side menu active category
   document.querySelector('.active-category').classList.remove('active-category')
   newcategory.classList.add('active-category')
-  console.log(document.querySelector('.active-category').innerHTML)
 
   // clean apps and load new ones
   document.getElementById('app-container').innerHTML = ''
