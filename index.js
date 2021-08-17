@@ -1,4 +1,5 @@
 
+var appCounter = 0;
 var columns = 8;
 var webapps = [
   path = '.',
@@ -18,8 +19,8 @@ var webapps = [
     // }
   },
   packageIndex = {
-    // '8521-1234': 0,
-    // '8521-1235': 1,
+    // 0: '8521-1234',
+    // 1: '8521-1235',
   }
 ];
 
@@ -52,19 +53,19 @@ function makePackages() {
       webapps[1][catName] = catApps;
       // make list with all apps and later keep json index of them
       for (app in catApps) {
-        if (!webapps[3].hasOwnProperty(catApps[app])) {
-          webapps[3][catApps[app]] = '';
+        if (!Object.values(webapps[3]).includes(catApps[app])) {
+          webapps[3][appCounter++] = catApps[app];
         }
       }
     }
   }
-  console.log(webapps[2]);
+
 
   // now check for other apps in package-merged to add on the list
   if (packages != undefined) {
     for (app of packages) {
-      if (!webapps[3].hasOwnProperty(app.name)) {
-        webapps[3][app.name] = '';
+      if (!Object.values(webapps[3]).includes(app.name)) {
+        webapps[3][appCounter++] = app.name;
       }
     }
   }
@@ -72,7 +73,8 @@ function makePackages() {
   loadCategories();
 
   // package.JS APP READ -> webapps.packages var update
-  for (app in webapps[3]) {
+  for (counter in webapps[3]) {
+    let app = webapps[3][counter];
     var script = document.createElement('script');
     script.src = sformat(webapps[0] + '{}/package.js', app);
     script.name = app;
@@ -80,6 +82,9 @@ function makePackages() {
     script.onload = function () {
       webapps[2][this.name] = package;
       // After all scripts are loaded, load all apps to html (active category == "all")
+      //console.log(Object.keys(webapps[3]).length + " " + Object.keys(webapps[2]).length);
+      //console.log(webapps[3])
+      //console.log(webapps[2])
       if (Object.keys(webapps[3]).length == Object.keys(webapps[2]).length) {
         onScriptsLoaded('Όλα');
       }
@@ -110,10 +115,8 @@ function onScriptsLoaded(activeCategory) {
   } else {
     collection = webapps[1][activeCategory];
   }
-  //console.log(collection)
-  for (const app of collection) {
-    //console.log(app)
-    //console.log(webapps[2]);
+  for (var i = 0; i < Object.keys(webapps[3]).length; i++) {
+    var app = webapps[3][i];
     ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/package.png"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].description));
   }
   //><div class="app-image"><img src="{}/package.png"></div>
