@@ -62,10 +62,12 @@ function merge_package_json() {
   console.log('Συνολικές εφαρμογές στη λίστα: ' + packages.length);
   var superString = '';
   for (i = 0; i < packages.length - 1; i++) {
-    superString += JSON.stringify(packages[i]) + ', ';
+    superString += JSON.stringify(packages[i], null, 4) + ', ';
   }
-  superString += JSON.stringify(packages[packages.length - 1]);
-  superString = 'packages = [' + JSON.stringify(superString, null, 4) + ']';
+  superString += JSON.stringify(packages[packages.length - 1], null, 4);
+  console.log(superString);
+  superString = 'packages = [\n' + superString + '\n]\n';
+  
   fs.writeFileSync('package-merged.js', superString);
 }
 
@@ -170,7 +172,7 @@ function startServer() {
   });
   server.listen(3000, function () {
     console.log('Διεύθυνση σύνδεσης στη συλλογή http://' + getIP() + ':3000/');
-    rl.question('Πατήστε ENTER για τέλος ', (input) => {
+    rl.question('Πατήστε ENTER για τερματισμό του webserver ', (input) => {
       if (input == "") {
         // stop webserver
         server.close();
@@ -274,7 +276,6 @@ function init() {
   // 3) ftiaxe kai ena template index.html
   fs.copyFile('node_modules/sch-webapps/index.html', 'index.html', (err) => {
     if (err) throw err;
-    console.log('success');
   });
 
   var args = process.argv.slice(2);
