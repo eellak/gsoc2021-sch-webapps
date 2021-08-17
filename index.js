@@ -113,7 +113,9 @@ function onScriptsLoaded(activeCategory) {
   }
   for (var i = 0; i < Object.keys(webapps[3]).length; i++) {
     var app = webapps[3][i];
-    ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].icon, webapps[2][app].description));
+    if (collection.includes(app)) {
+      ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].icon, webapps[2][app].description));
+    }
   }
   ge('app-container').innerHTML = ih.join('\n');
 }
@@ -195,6 +197,7 @@ function makeHtml() {
                     <div id="num">num</div>
                     <div id="plus" onclick="changeColumns(2)"></div>
                 </div>
+                <a href="https://gitlab.com/ts.sch.gr/sch-webapps" id="ref">By sch-webapps</a>
             </div>
         </div>
         <div id="app-container">
