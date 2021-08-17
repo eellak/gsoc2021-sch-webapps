@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=sch-webapps-linux
+Comment=Συλλογές εκπαιδευτικών ιστοεφαρμογών
+TryExec=/usr/bin/npx
+Exec=npx sch-webapps
+Icon=browser
+Terminal=true
+Type=Application
+Categories=Education;
