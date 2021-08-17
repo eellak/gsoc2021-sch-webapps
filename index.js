@@ -117,7 +117,7 @@ function onScriptsLoaded(activeCategory) {
   }
   for (var i = 0; i < Object.keys(webapps[3]).length; i++) {
     var app = webapps[3][i];
-    ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/package.png"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].description));
+    ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].icon, webapps[2][app].description));
   }
   //><div class="app-image"><img src="{}/package.png"></div>
   ge('app-container').innerHTML = ih.join('\n');
