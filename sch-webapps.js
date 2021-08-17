@@ -65,7 +65,6 @@ function merge_package_json() {
     superString += JSON.stringify(packages[i], null, 4) + ', ';
   }
   superString += JSON.stringify(packages[packages.length - 1], null, 4);
-  console.log(superString);
   superString = 'packages = [\n' + superString + '\n]\n';
   
   fs.writeFileSync('package-merged.js', superString);

@@ -1,6 +1,6 @@
 
 var appCounter = 0;
-var columns = 8;
+var columnSize = 18;
 var webapps = [
   path = '.',
   tabs = {
@@ -103,7 +103,7 @@ function loadCategories() {
   }
   ge('categories').innerHTML += ih.join('\n');
   console.log(ge('num').innerText)
-  ge('num').innerText = columns;
+  ge('num').innerText = columnSize;
 }
 
 function onScriptsLoaded(activeCategory) {
@@ -119,7 +119,6 @@ function onScriptsLoaded(activeCategory) {
     var app = webapps[3][i];
     ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].icon, webapps[2][app].description));
   }
-  //><div class="app-image"><img src="{}/package.png"></div>
   ge('app-container').innerHTML = ih.join('\n');
 }
 
@@ -152,13 +151,13 @@ function newCategory(newcategory) {
 
 // 0: minus, 1: plus
 function changeColumns(sign) {
-  columns += Math.pow(-1, sign)
-  if (columns < 0)
-    columns = 0;
-  if (columns > 10)
-    columns = 10;
-  ge('num').innerText = columns;
-  // ge('app-container').style.gridTemplateColumns = "repeat(auto-fill, " + 1 + columns + "em";
+  columnSize += Math.pow(-1, sign)
+  if (columnSize < 5)
+    columnSize = 5;
+  if (columnSize > 23)
+    columnSize = 23;
+  ge('num').innerText = columnSize;
+  document.querySelector(':root').style.setProperty('--colwidth', parseInt(columnSize) + 'em');
 }
 
 function init() {
@@ -195,7 +194,7 @@ function makeHtml() {
             </div>
 
             <div id="options">
-                Στήλες
+                Μέγεθος
                 <div>
                     <div id="minus" onclick="changeColumns(1)"></div>
                     <div id="num">num</div>

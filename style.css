@@ -1,3 +1,7 @@
+:root {
+    --colwidth: 18em;
+}
+
 html,
 body {
     height: 100%;
@@ -8,6 +12,10 @@ body {
     scroll-behavior: smooth;
     overflow-x: hidden;
     background-color: rgb(194, 194, 194);
+}
+
+html {
+    overflow-y: hidden;
 }
 
 .container {
@@ -146,7 +154,7 @@ body {
 
 #app-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 18em);
+    grid-template-columns: repeat(auto-fill, var(--colwidth));
     justify-content: space-evenly;
     grid-gap: 2em 1em;
     margin: 2em;
@@ -163,6 +171,8 @@ body {
     display: flex;
     justify-content: center;
     position: relative;
+    width: 100%;
+    height: calc(var(--colwidth) * 0.5625); /* for aspect-ratio 16:9*/
 }
 
 .start-icon {
@@ -211,7 +221,6 @@ a {
     background-repeat: no-repeat;
     background-position: center;
     width: 100%;
-    margin-top: 1em;
 }
 
 .app-title {
