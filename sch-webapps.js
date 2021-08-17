@@ -150,7 +150,6 @@ function startServer() {
       return res.end('Method not implemented');
     }
     var file = path.join(dir, reqpath.replace(/\/$/, '/index.html'));
-    console.log(file);
     if (file.indexOf(dir + path.sep) !== 0) {
       res.statusCode = 403;
       res.setHeader('Content-Type', 'text/plain');
@@ -170,7 +169,13 @@ function startServer() {
   });
   server.listen(3000, function () {
     console.log('Διεύθυνση σύνδεσης στη συλλογή http://' + getIP() + ':3000/');
-    console.log('Πατήστε Ctrl+C για τέλος');
+    rl.question('Πατήστε ENTER για τέλος ', (input) => {
+      if (input == "") {
+        // stop webserver
+        server.close();
+        menu();
+      }
+    });
   });
 }
 
