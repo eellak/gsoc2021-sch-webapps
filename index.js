@@ -47,12 +47,12 @@ function makePackages() {
       webapps.path = path;
 
     // update "webapps" variable that holds info about each category and its corresponding apps.
-    for (i = 1; i < txtSplit.length; i++) {
+    for (var i = 1; i < txtSplit.length; i++) {
       var catName = txtSplit[i].split(':')[0].trim();
       var catApps = txtSplit[i].split(':')[1].trim().split(' ');
       webapps.tabs[catName] = catApps;
       // make list with all apps and later keep json index of them
-      for (app in catApps) {
+      for (let app in catApps) {
         if (!Object.values(webapps.packageIndex).includes(catApps[app])) {
           webapps.packageIndex[appCounter++] = catApps[app];
         }
@@ -63,7 +63,7 @@ function makePackages() {
 
   // now check for other apps in package-merged to add on the list
   if (packages != undefined) {
-    for (app of packages) {
+    for (let app of packages) {
       if (!Object.values(webapps.packageIndex).includes(app.name)) {
         webapps.packageIndex[appCounter++] = app.name;
       }
@@ -73,13 +73,14 @@ function makePackages() {
   loadCategories();
 
   // package.JS APP READ -> webapps.packages var update
-  for (counter in webapps.packageIndex) {
+  for (let counter in webapps.packageIndex) {
     let app = webapps.packageIndex[counter];
     var script = document.createElement('script');
     script.src = sformat(webapps.path + '{}/package.js', app);
     script.name = app;
     document.body.appendChild(script);
     script.onload = function () {
+      // eslint-disable-next-line no-undef
       webapps.pckgs[this.name] = package;
       // After all scripts are loaded, load all apps to html (active category == "all")
       if (Object.keys(webapps.packageIndex).length == Object.keys(webapps.pckgs).length) {
@@ -95,7 +96,7 @@ function ge(element) {
 
 function loadCategories() {
   const ih = [];
-  for (cat in webapps[1]) {
+  for (let cat in webapps.pckgs) {
     ih.push(sformat('<a href="#" onclick="newCategory(this)">{}</a>', cat));
   }
   ge('categories').innerHTML += ih.join('\n');

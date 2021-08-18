@@ -71,8 +71,6 @@ function merge_package_json() {
 }
 
 function printAllApps() {
-  let packages = [];
-
   const folderPath = 'node_modules/';
 
   console.log('Βρέθηκαν οι ακόλουθες ιστοεφαρμογές:');
@@ -172,7 +170,7 @@ function startServer() {
   server.listen(3000, function () {
     console.log('Διεύθυνση σύνδεσης στη συλλογή http://' + getIP() + ':3000/');
     rl.question('Πατήστε ENTER για τερματισμό του webserver ', (input) => {
-      if (input == "") {
+      if (input == '') {
         // stop webserver
         server.close();
         menu();
