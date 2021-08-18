@@ -225,7 +225,7 @@ a {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    width: 100%;
+    width: auto;
 }
 
 .app-title {
