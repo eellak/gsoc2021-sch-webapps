@@ -37,16 +37,16 @@ function writeFileIfNotExists(fname, contents, options, callback) {
         // This just means the file already existed.
         // We will not treat that as an error, so kill the error code
         err = null;
-        //console.log('Not overwriting existing file:', fname);
+        console.log('Not overwriting existing file:', fname);
       }
       else {
         // E.g. permission errors
-        //console.log('Error while writing file:', fname);
+        console.log('Error while writing file:', fname);
         throw err;
       }
     }
     else {
-      //console.log('Created file:', fname);
+      console.log('Created file:', fname);
     }
     if (typeof callback === 'function') {
       callback(err);
@@ -54,7 +54,9 @@ function writeFileIfNotExists(fname, contents, options, callback) {
   });
 }
 
-parser.on('error', function (err) { //console.log('Parser error', err); });
+parser.on('error', function (err) {
+  console.log('Parser error', err);
+});
 
 function onHTMLDownloaded(data) {
   app.html = data.toString();
