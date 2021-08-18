@@ -1,14 +1,14 @@
 
 var appCounter = 0;
 var columnSize = 18;
-var webapps = [
-  path = '.',
-  tabs = {
+var webapps = {
+  path: '.',
+  tabs: {
     // "Δημοτικό": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
     // "Γυμνάσιο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234'],
     // "Λύκειο": ['8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234', '8521-1234']
   },
-  pckgs = {
+  pckgs: {
     // '8521-1234': {
     //     "description": "πληροφορική γυμνασίου",
     //     "name": "8521-1234"
@@ -18,11 +18,11 @@ var webapps = [
     //     "name": "8521-1234"
     // }
   },
-  packageIndex = {
+  packageIndex: {
     // 0: '8521-1234',
     // 1: '8521-1235',
   }
-];
+}
 
 /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
 function openNav() {
@@ -38,23 +38,23 @@ function closeNav() {
 function makePackages() {
   // READ HTML: path, categories, apps
   var txt = document.getElementById('app-container').innerText.trim();
-  webapps[0] = 'node_modules/';
+  webapps.path = 'node_modules/';
   if (txt != '') {
     var txtSplit = txt.split(',');
 
     var path = txtSplit[0].split(':')[1].trim();
     if (path != '')
-      webapps[0] = path;
+      webapps.path = path;
 
     // update "webapps" variable that holds info about each category and its corresponding apps.
     for (i = 1; i < txtSplit.length; i++) {
       var catName = txtSplit[i].split(':')[0].trim();
       var catApps = txtSplit[i].split(':')[1].trim().split(' ');
-      webapps[1][catName] = catApps;
+      webapps.tabs[catName] = catApps;
       // make list with all apps and later keep json index of them
       for (app in catApps) {
-        if (!Object.values(webapps[3]).includes(catApps[app])) {
-          webapps[3][appCounter++] = catApps[app];
+        if (!Object.values(webapps.packageIndex).includes(catApps[app])) {
+          webapps.packageIndex[appCounter++] = catApps[app];
         }
       }
     }
@@ -64,8 +64,8 @@ function makePackages() {
   // now check for other apps in package-merged to add on the list
   if (packages != undefined) {
     for (app of packages) {
-      if (!Object.values(webapps[3]).includes(app.name)) {
-        webapps[3][appCounter++] = app.name;
+      if (!Object.values(webapps.packageIndex).includes(app.name)) {
+        webapps.packageIndex[appCounter++] = app.name;
       }
     }
   }
@@ -73,16 +73,16 @@ function makePackages() {
   loadCategories();
 
   // package.JS APP READ -> webapps.packages var update
-  for (counter in webapps[3]) {
-    let app = webapps[3][counter];
+  for (counter in webapps.packageIndex) {
+    let app = webapps.packageIndex[counter];
     var script = document.createElement('script');
-    script.src = sformat(webapps[0] + '{}/package.js', app);
+    script.src = sformat(webapps.path + '{}/package.js', app);
     script.name = app;
     document.body.appendChild(script);
     script.onload = function () {
-      webapps[2][this.name] = package;
+      webapps.pckgs[this.name] = package;
       // After all scripts are loaded, load all apps to html (active category == "all")
-      if (Object.keys(webapps[3]).length == Object.keys(webapps[2]).length) {
+      if (Object.keys(webapps.packageIndex).length == Object.keys(webapps.pckgs).length) {
         onScriptsLoaded('Όλα');
       }
     };
@@ -107,14 +107,14 @@ function onScriptsLoaded(activeCategory) {
   var collection;
 
   if (activeCategory == 'Όλα') {
-    collection = Object.keys(webapps[2]);
+    collection = Object.keys(webapps.pckgs);
   } else {
-    collection = webapps[1][activeCategory];
+    collection = webapps.tabs[activeCategory];
   }
-  for (var i = 0; i < Object.keys(webapps[3]).length; i++) {
-    var app = webapps[3][i];
+  for (var i = 0; i < Object.keys(webapps.packageIndex).length; i++) {
+    var app = webapps.packageIndex[i];
     if (collection.includes(app)) {
-      ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps[0] + app, webapps[0] + app, webapps[2][app].icon, webapps[2][app].description));
+      ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps.path + app, webapps.path + app, webapps.pckgs[app].icon, webapps.pckgs[app].description));
     }
   }
   ge('app-container').innerHTML = ih.join('\n');
