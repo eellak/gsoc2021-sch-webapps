@@ -52,7 +52,7 @@ function merge_package_json() {
         if (keyword && desc) {
           // json qualifies
           packages.push(jsondata);
-          console.log('   - Στη λίστα: ' + jsondata.description);
+          console.log('   - ' + jsondata.description);
         }
       }
     });
