@@ -1,6 +1,6 @@
-# sch-webapps: collections of educational web applications
+# sch-webapps
 
-A Google Summer of Code application for the sch-webapps project of the GFOSS organization.
+Collections of educational web applications.
 
 ## Introduction
 
