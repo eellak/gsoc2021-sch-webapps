@@ -65,7 +65,6 @@ function makePackages() {
     for (var p in packages) {
       var app = packages[p];
       if (webapps.tabs['Όλα'].indexOf(app.name) == -1) {
-        console.log(":ALAAK")
         webapps.tabs['Όλα'].push(app.name);
       }
     }
@@ -110,7 +109,6 @@ function onScriptsLoaded(activeCategory) {
 
   for (var ind in collection) {
     var app = collection[ind];
-    //console.log(collection.includes(app))
     if (collection.indexOf(app)) {
       ih.push(sformat('<div class="app"><a href="{}/index.html"><div class="image-container"><div class="overlay"><div class="start-icon"></div><div class="click-start">Εκκίνηση</div></div><img class="app-image" src="{}/{}"></div><div class="app-title">{}</div></a></div>', webapps.path + app, webapps.path + app, webapps.pckgs[app].icon, webapps.pckgs[app].description));
     }

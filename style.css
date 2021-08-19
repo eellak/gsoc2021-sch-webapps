@@ -185,8 +185,8 @@ html {
 
 .start-icon {
     position: relative;
-    height: 6em;
-    width: 6em;
+    height: calc(var(--colwidth) * 0.3);
+    width: calc(var(--colwidth) * 0.3);
     background: url("imgs/start.svg");
     background-size: cover;
     cursor: pointer;
@@ -194,7 +194,7 @@ html {
 
 .click-start {
     position: relative;
-    font-size: 1.5em;
+    font-size: calc(var(--colwidth) * 0.1);
     color: rgb(49, 49, 49);
 }
 
