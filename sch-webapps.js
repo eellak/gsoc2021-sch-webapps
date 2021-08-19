@@ -170,7 +170,7 @@ function startServer() {
   server.listen(3000, function () {
     console.log('Διεύθυνση σύνδεσης στη συλλογή http://' + getIP() + ':3000/');
     rl.question('Πατήστε ENTER για τερματισμό του webserver ', (input) => {
-      if (input == '') {
+      if (input != null) {
         // stop webserver
         server.close();
         menu();
